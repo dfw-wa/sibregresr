@@ -14,7 +14,3 @@ stretching_mean(x, window_size = Inf)
 \description{
 Stretching mean
 }
-\examples{
-vec <- c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
-stretching_mean(vec, window_size = 5)
-}

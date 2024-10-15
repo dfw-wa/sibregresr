@@ -4,12 +4,12 @@
 \alias{performance_weights}
 \title{Calculated weighted average forecasts}
 \usage{
-performance_weights(fits, n_years = 15)
+performance_weights(fits, perf_yrs = 15)
 }
 \arguments{
 \item{fits}{data frame returned by \code{fit_mods} function}
 
-\item{n_years}{maximum number of years of predictions to include in performance metrics. Set to infinity to use a stretching window.}
+\item{perf_yrs}{maximum number of years of predictions to include in performance metrics. Set to infinity to use a stretching window.}
 }
 \value{
 a data frame with predictions from component models and weighted average models based on AICc, MAPE, and RMSE weights.

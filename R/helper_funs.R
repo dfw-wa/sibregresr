@@ -5,37 +5,36 @@
 #'
 #' @return
 #'
-#' @examples
 return_to_brood <- function(rt,by_stock=TRUE){
 
   # Find the min age column in the return table (rt), then make "sym" for tidy eval below
-  min_age <- colnames(rt)[str_detect(colnames(rt),"Age")] |>  min() |>  rlang::sym()
+  min_age <- colnames(rt)[stringr::str_detect(colnames(rt),"Age")] |>  min() |>  rlang::sym()
 
   if(by_stock){
     # Reshape the data, filter rows with complete min_age data
     rt |>
-      group_by(Stock) |>
-      gather(key="AgeName", value="Return", contains("Age")) |>
-      mutate(Age=parse_number(AgeName)) |>
-      mutate(BroodYear=ReturnYear - Age) |>
-      select(-ReturnYear, -Age) |>
-      spread(AgeName, Return) |>
+      dplyr::group_by(Stock) |>
+      tidyr::gather(key="AgeName", value="Return", tidyselect::contains("Age")) |>
+      dplyr::mutate(Age=readr::parse_number(AgeName)) |>
+      dplyr::mutate(BroodYear=ReturnYear - Age) |>
+      dplyr::select(-ReturnYear, -Age) |>
+      tidyr::spread(AgeName, Return) |>
       # Unquo the min_age thing
-      filter(!is.na(!!min_age)) |>
-      ungroup() |>
+      dplyr::filter(!is.na(!!min_age)) |>
+      dplyr::ungroup() |>
       as.data.frame() |>
-      arrange(Stock,BroodYear)}else{
+      dplyr::arrange(Stock,BroodYear)}else{
         rt |>
-          gather(key="AgeName", value="Return", contains("Age")) |>
-          mutate(Age=parse_number(AgeName)) |>
-          mutate(BroodYear=ReturnYear - Age) |>
-          select(-ReturnYear, -Age) |>
-          spread(AgeName, Return) |>
+          tidyr::gather(key="AgeName", value="Return", tidyselect::contains("Age")) |>
+          dplyr::mutate(Age=readr::parse_number(AgeName)) |>
+          dplyr::mutate(BroodYear=ReturnYear - Age) |>
+          dplyr::select(-ReturnYear, -Age) |>
+          tidyr::spread(AgeName, Return) |>
           # Unquo the min_age thing
-          filter(!is.na(!!min_age)) |>
-          ungroup() |>
+          dplyr::filter(!is.na(!!min_age)) |>
+          dplyr::ungroup() |>
           as.data.frame() |>
-          arrange(BroodYear)
+          dplyr::arrange(BroodYear)
 
       }
 
@@ -51,14 +50,14 @@ return_to_brood <- function(rt,by_stock=TRUE){
 #'
 #' @examples
 brood_to_return <- function(bt){
-  bt |>  group_by(Stock) |>
-    pivot_longer(cols=contains("Age"), names_to="AgeNames", values_to="Return") |>
-    arrange(AgeNames) |>
-    mutate(Age=parse_number(AgeNames),
+  bt |>  dplyr::group_by(Stock) |>
+    tidyr::pivot_longer(cols=tidyselect::contains("Age"), names_to="AgeNames", values_to="Return") |>
+    dplyr::arrange(AgeNames) |>
+    dplyr::mutate(Age=readr::parse_number(AgeNames),
            ReturnYear=BroodYear+Age) |>
-    filter(!is.na(Return)) |>
-    select(Stock, ReturnYear, AgeNames, Return) |>
-    pivot_wider(names_from=AgeNames, values_from=Return)
+    dplyr::filter(!is.na(Return)) |>
+    dplyr::select(Stock, ReturnYear, AgeNames, Return) |>
+    tidyr::pivot_wider(names_from=AgeNames, values_from=Return)
 }
 
 #
@@ -101,7 +100,7 @@ get_AIC <- function(y, mod, npar){
   n <- length(which(!is.na(y)))
 
   # Negative log-likelihoods
-  nLL <- dlmLL(y, mod)
+  nLL <- dlm::dlmLL(y, mod)
 
   # Calculate Information Criteria (IC)
   AIC <- 2*npar +  2*nLL
@@ -120,9 +119,6 @@ get_AIC <- function(y, mod, npar){
 #'
 #' @return
 #'
-#' @examples
-#' vec <- c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
-#' stretching_mean(vec, window_size = 5)
 stretching_mean <- function(x, window_size = Inf) {
   n <- length(x)
 
@@ -150,9 +146,6 @@ stretching_mean <- function(x, window_size = Inf) {
 #'
 #' @return
 #'
-#' @examples
-#' vec <- 1:10
-#' stretching_samp_sd(vec, window_size = 5)
 stretching_samp_sd <- function(x, window_size = Inf, sample_sd=FALSE) {
   n <- length(x)
 

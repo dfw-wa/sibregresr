@@ -4,14 +4,16 @@
 \alias{setup_data}
 \title{Setup data}
 \usage{
-setup_data(df, type = "return", n_forecasts = 20)
+setup_data(df, type = "return", mod_list, n_forecasts = 20)
 }
 \arguments{
 \item{df}{Input data. Either a return table or a brood table. Column names: Stock, ReturnYear (or BroodYear), and for each age (e.g., Age3). Must be in that format.}
 
 \item{type}{whether df is a "return" or "brood" table. Should be one of those values.}
 
-\item{n_eval}{number of one year-ahead predictions to make (i.e., maximum number of years to exclude)}
+\item{mod_list}{list of model functions as returned from \code{mod_funs} function call}
+
+\item{n_forecasts}{number of one-year ahead forecasts to conduct}
 }
 \value{
 tibble with list columns

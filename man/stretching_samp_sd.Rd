@@ -16,7 +16,3 @@ stretching_samp_sd(x, window_size = Inf, sample_sd = FALSE)
 \description{
 Stretching sample SD
 }
-\examples{
-vec <- 1:10
-stretching_samp_sd(vec, window_size = 5)
-}
