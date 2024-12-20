@@ -16,7 +16,7 @@
 #' - tvIntOnly --	Time-varying Intercept-only model. Random walk on return, no sibling predictor.
 #' - constIntOnly --	Constant Intercept-only model. Long-term average, no sibling predictor.
 #'
-#'
+#' @export
 mod_funs<-function(include=c(
   "constIntOnly",
   "tvIntOnly",
