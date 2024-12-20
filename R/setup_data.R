@@ -4,23 +4,29 @@
 #'
 #' @param df Input data. Either a return table or a brood table. Column names: Stock, ReturnYear (or BroodYear), and for each age (e.g., Age3). Must be in that format.
 #' @param n_forecasts number of one-year ahead forecasts to conduct
-#' @param type whether df is a "return" or "brood" table. Should be one of those values.
 #' @param mod_list list of model functions as returned from `mod_funs` function call
 #'
 #' @return tibble with list columns
-#'
+#' @export
 setup_data<-function(df,
-                     type="return",
-                     mod_list,
+                     mod_list=mod_funs(),
                      n_forecasts=20
                     ){
 
-    #if df is in brood table format, transform it into return table format.
-   ( if(type =="brood"){
-      brood_to_return(df)
-    }else{
-      df
-    }) |>
+
+  if(n_forecasts>(nrow(df)-5)){
+    stop("n_forecasts is greater the number of years of observation minus 5. Please enter a smaller number of forecasts")
+  }
+
+  if(any(colnames(df)=="BroodYear")){
+    df2<- brood_to_return(df)
+  }else{
+    df2<-df
+  }
+
+
+
+  df2 |>
     group_by(Stock) |>
     (\(dat)
     bind_rows(dat,
@@ -37,7 +43,7 @@ setup_data<-function(df,
     crossing(tibble(model_name=names(mod_list),
                     model=mod_list),
              # the ages for which you want forecasts
-             Age=4:6) |>
+             Age=sort(as.numeric(substr(colnames(df2)[grepl("Age",colnames(df2))],4,4)))[-1]) |>
     mutate(Actual=purrr::map2_dbl(Actual,Age,~.x |> pull(paste0("Age",.y)))) |>
     dplyr::arrange(Stock,Age,n_years) #if you have n_years.
 

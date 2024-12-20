@@ -74,7 +74,7 @@ get_npar <- function(build){
   v_par <- length(which(diag(build$W)>0))
 
   # regression coeffs plus intercept
-  betas <- ncol(build$X)+1
+  betas <- ncol(build$C0)
 
   # number of parameters
   v_par + betas

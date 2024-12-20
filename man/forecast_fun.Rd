@@ -6,20 +6,20 @@
 \usage{
 forecast_fun(
   df = summer_chinook_2023,
-  type = "brood",
   include = c("constIntOnly", "tvIntOnly", "tvIntSlope", "tvSlope", "constLM",
     "tvCRzeroInt", "constCRzeroInt", "tvInt"),
-  perf_yrs = 15
+  perf_yrs = 15,
+  wt_yrs = NULL
 )
 }
 \arguments{
 \item{df}{Input data. Either a return table or a brood table. Column names: Stock, ReturnYear (or BroodYear), and for each age (e.g., Age3). Must be in that format.}
 
-\item{type}{whether df is a "return" or "brood" table. Should be one of those values.}
-
 \item{include}{vector of names of models to include. Default is all options}
 
 \item{perf_yrs}{maximum number of years of predictions to include in performance metrics. Set to infinity to use a stretching window.}
+
+\item{wt_yrs}{number of years of one-step-ahed predictions to use to calculate performance-based model weights (i.e., MAPE and RMSE). If null (the default) the same number of years is used to calculate weights as is used to evaluate performance of ensemble and individual models.}
 }
 \value{
 A tibble with ensemble forecasts, forecasts from component models, and performance measures

@@ -7,6 +7,7 @@
 #'
 #'
 #' @return tible
+#' @export
 fit_mods<-function(dat){
 
 fits<-  dat |>
