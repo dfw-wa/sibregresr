@@ -1,0 +1,70 @@
+---
+title: "Salmon return forecasts"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output:    word_document
+params:
+  forecasts: NULL
+  mod_name: NULL
+  stocks: NULL
+  forecast_year: NULL
+    
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+
+# table_fun<-function(caption, dat) {
+#     knitr::knit_child(input = "table template.Rmd", envir = environment(), quiet = TRUE)
+#   }
+
+```
+
+
+```{r,results='asis',echo=FALSE,warning=FALSE,message=FALSE,fig.width=7,fig.height=9.5,dpi=300}
+cat("<br><br><br><br><br>\n\n\n")
+
+  
+    
+   
+for(s in params$stocks){
+  cat('\\pagebreak')
+  dat<-(params$forecasts) |> dplyr::filter(Stock==s)
+   
+  cat(paste("##", s," <br><br>\n\n")) 
+  
+  forecast_table <-make_table(dat,mod_name=params$mod_name,forecast_year = params$forecast_year)
+   
+  # forecast_table <-forecast_table|> 
+  # set_table_properties(layout = "autofit") |> 
+  # set_caption(caption = sprintf("**Table:** %s",params$forecast_year, s, " forecasts and prediction intervals.Performancee metrics of precion -- MAPE = mean absolute percent error, RMSE = root mean square error-- and bias == MPE = mean percent error, MEr = mean error calculated over that previous ",params$perf_years," years."))
+  
+  
+  
+    cat(knitr::knit_print(forecast_table),"<br>","\n\n")
+    
+    cat(paste("**Table:**",params$forecast_year, s, " forecasts and prediction intervals.Performancee metrics MAPE = mean absolute percent error, RMSE = root mean square error, MPE = mean percent error, and MEr = mean error."))
+       # knitr::knit_child(forecast_table)
+     cat("<br>","\n\n")
+     
+  for(m in params$mod_name){
+    # dat2<-filter(dat,model_name==m)
+       # cat(paste("###",params$forecast_year, s,"returns forecasted by ",m,"model <br><br>\n\n"))
+      forecast_plot<- make_plot(dat,mod_name=m) 
+   
+      
+        # Display the plot
+  print(forecast_plot)
+   cat("<br>","\n\n")
+  # Add the caption
+  cat(paste("**Figure:**","Annual", s, "returns (black points and dashed line) and forecasts (red) from the",m,"model. The thick part of errorbar spans 50% prediciton intervals and the thin part spans 90% intervals."))
+
+
+  
+  }
+     
+ cat('\\pagebreak')
+ 
+  }
+
+```
