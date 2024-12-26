@@ -85,7 +85,8 @@ all_funs<-list(
   "constLM" = constLM,
   "tvCRzeroInt" = tvCRzeroInt,
   "constCRzeroInt" = constCRzeroInt,
-  "tvInt" = tvInt
+  "tvInt" = tvInt,
+  "PenDlm" = pen_dlm
 )
 
 all_funs[include]
