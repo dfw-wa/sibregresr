@@ -54,7 +54,7 @@ brood_to_return <- function(bt){
     tidyr::pivot_longer(cols=tidyselect::contains("Age"), names_to="AgeNames", values_to="Return") |>
     dplyr::arrange(AgeNames) |>
     dplyr::mutate(Age=readr::parse_number(AgeNames),
-           ReturnYear=BroodYear+Age) |>
+                  ReturnYear=BroodYear+Age) |>
     dplyr::filter(!is.na(Return)) |>
     dplyr::select(Stock, ReturnYear, AgeNames, Return) |>
     tidyr::pivot_wider(names_from=AgeNames, values_from=Return)
@@ -91,7 +91,7 @@ get_npar <- function(build){
 #' @return real, AICc
 #'
 #' @examples
-get_AIC <- function(y, mod, npar){
+get_AIC <- function(y, mod, npar, mod_type="dlm"){
 
   # y <- y[which(!is.na(y))] #
   # print(y)
@@ -100,8 +100,11 @@ get_AIC <- function(y, mod, npar){
   n <- length(which(!is.na(y)))
 
   # Negative log-likelihoods
-  nLL <- dlm::dlmLL(y, mod)
-
+  if(mod_type=="dlm"){
+    nLL <- dlm::dlmLL(y, mod)
+  }else{
+    nLL=mod$obj$report()$nll
+  }
   # Calculate Information Criteria (IC)
   AIC <- 2*npar +  2*nLL
 
