@@ -3,6 +3,9 @@
 #' @param fits data frame returned by `fit_mods` function
 #' @param perf_yrs maximum number of years of predictions to include in performance metrics. Set to infinity to use a stretching window.
 #' @param wt_yrs  number of years of one-step-ahed predictions to use to calculate performance-based model weights (i.e., MAPE and RMSE). If null (the default) the same number of years is used to calculate weights as is used to evaluate performance of ensemble and individual models.
+#' @param transformation the trnasformation that was conducted on the response prior to fitting(default is log)
+#' @param inverse_transformation the inverse of the transformation that was conducted on the response prior to fitting (default is exp)
+#' @param scale_y boolean whether the response was scaled prior to fitting
 #'
 #' @return a data frame with predictions from component models and weighted average models based on AICc, MAPE, and RMSE weights.
 #'
@@ -34,7 +37,10 @@
 #' @export
 performance_weights<-function(fits,
                               perf_yrs=15,
-                              wt_yrs=NULL
+                              wt_yrs=NULL,
+                              transformation=log,
+                              inverse_transformation=exp,
+                              scale_y=FALSE
 ){
 
 
@@ -48,11 +54,24 @@ performance_weights<-function(fits,
   # Get the predictions, calculate error metrics
   preds_perf <- fits %>%
     dplyr::filter(purrr::map_lgl(error,is.null)) %>%
-    mutate(build=purrr::pmap(tibble::lst(estimates, model, xy_dat), ~with(list(...), model(parm=estimates$par, x.mat=cbind(xy_dat$x)))),
-           filter=purrr::map2(xy_dat, build, ~dlm::dlmFilter((.x$y), .y)),
-           npar=purrr::map_dbl(build, get_npar),
-           AICc=purrr::pmap_dbl(tibble::lst(dat=xy_dat,model=build, npar), ~with(list(...), get_AIC(dat$y, model, npar))),
-           pred=purrr::map_dbl(filter, ~exp(.x$f[length(.x$f)])),
+    mutate(build=ifelse(model_name=="PenDlm",NA,purrr::pmap(tibble::lst(estimates, model, xy_dat), ~with(list(...), model(parm=estimates$par, x.mat=cbind(xy_dat$x))))),
+           filter=ifelse(model_name=="PenDlm",NA,purrr::map2(xy_dat, build, ~dlm::dlmFilter((.x$y), .y))),
+           npar=ifelse(model_name=="PenDlm",
+                       (purrr::map_dbl(estimates, \(x)(length(fits$estimates[[17]]$obj$par)-1)))
+                       ,(purrr::map_dbl(build, get_npar))),
+           AICc=ifelse(model_name=="PenDlm",
+
+                       purrr::pmap_dbl(tibble::lst(dat=xy_dat,estimates, npar), ~with(list(...), get_AIC(dat$y, estimates, npar,mod_type="TMB"))),
+
+                       purrr::pmap_dbl(tibble::lst(dat=xy_dat,model=build, npar), ~with(list(...), get_AIC(dat$y, model, npar)))),
+           pred=
+             ifelse(model_name=="PenDlm",
+             purrr::map_dbl(estimates,\(x){if(is.null(x)){0}else{(tail(x$obj$report()$pred,1))}}),
+
+             purrr::map_dbl(filter, ~((.x$f[length(.x$f)])))),
+           pred=if(scale_y){((pred*response_sd)+response_mu)}else{pred},
+           pred=inverse_transformation(pred),
+
            ReturnYear = purrr::map2_int(xy_og,Age,~(tail(.x$BroodYear,1)+.y))) %>%
     dplyr::mutate(
       Er=pred-Actual,
@@ -80,9 +99,9 @@ performance_weights<-function(fits,
      dplyr:: bind_rows(df,
                        dplyr::group_by(df,Stock,Age,Actual,ReturnYear,n_wts) %>%
                          dplyr::mutate(dplyr::across(c(RMSE_weight:MeanSA_weight),~.x*pred,.names="{.col}_pred"),
-                                       AICc_weight_pred=log(pred)*AICc_weight) |>
+                                       AICc_weight_pred=transformation(pred)*AICc_weight) |>
                          dplyr::summarize_at(dplyr::vars(tidyselect::contains("_pred")),sum) |>
-                         dplyr::mutate(AICc_weight_pred=exp(AICc_weight_pred)) |>
+                         dplyr::mutate(AICc_weight_pred=inverse_transformation(AICc_weight_pred)) |>
                          tidyr::pivot_longer(cols=RMSE_weight_pred:AICc_weight_pred,names_to = "model_name",values_to = "pred",names_pattern = "(.*)_pred")
      )
     )() |>
