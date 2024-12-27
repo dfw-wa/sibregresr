@@ -4,7 +4,7 @@
 \alias{get_AIC}
 \title{Calculate AICc for a dlm model object given the data and npar}
 \usage{
-get_AIC(y, mod, npar)
+get_AIC(y, mod, npar, mod_type = "dlm")
 }
 \arguments{
 \item{y}{response data}

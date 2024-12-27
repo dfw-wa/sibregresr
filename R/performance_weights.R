@@ -57,7 +57,7 @@ performance_weights<-function(fits,
     mutate(build=ifelse(model_name=="PenDlm",NA,purrr::pmap(tibble::lst(estimates, model, xy_dat), ~with(list(...), model(parm=estimates$par, x.mat=cbind(xy_dat$x))))),
            filter=ifelse(model_name=="PenDlm",NA,purrr::map2(xy_dat, build, ~dlm::dlmFilter((.x$y), .y))),
            npar=ifelse(model_name=="PenDlm",
-                       (purrr::map_dbl(estimates, \(x)(length(fits$estimates[[17]]$obj$par)-1)))
+                       (purrr::map_dbl(estimates, \(x)(length(x$obj$par)-1)))
                        ,(purrr::map_dbl(build, get_npar))),
            AICc=ifelse(model_name=="PenDlm",
 

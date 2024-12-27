@@ -4,6 +4,8 @@
 #' @param transformation transformation to be conducted on a response and predictors. default is log
 #' @param scale_x boolean whether to scale the predictor data prior to fitting
 #' @param scale_y boolean whether to scale the response data prior to fitting
+#' @param covariates data frame of covariates to add to data. must contain "ReturnYear" field, which is used to perform the join with the salmon return data.
+
 #'
 #'@details
 #' Can take several seconds as it is conducting maximum likeihood optimization for many models (n mdel * n stocks * n forecasts)
@@ -11,13 +13,16 @@
 #'
 #' @return tible
 #' @export
-fit_mods<-function(dat,transformation=log,scale_x=FALSE,scale_y=FALSE){
+fit_mods<-function(dat,transformation=log,scale_x=FALSE,scale_y=FALSE,
+                   covariates=tibble(year=numeric(0))){
 
   fits<-  dat |>
     mutate(
       xy_og=purrr::map2(data,Age, ~.x |>
                           dplyr::select(BroodYear, y=paste0("Age",.y), x=paste0("Age", .y-1)) |>
-                          dplyr::filter(!is.na(x))),
+                          dplyr::filter(!is.na(x)) |>
+                          dplyr::mutate(ReturnYear=BroodYear+.y) |>
+                          dplyr::left_join(covariates,by="ReturnYear")),
       response_mu=purrr::map_dbl(xy_og,~mean(transformation(.x$y[.x$BroodYear!=max(.x$BroodYear)]))),
       response_sd=purrr::map_dbl(xy_og,~sd(transformation(.x$y[.x$BroodYear!=max(.x$BroodYear)]))),
       ## For the retrospective fits, replace the last y with NA to get forecasts

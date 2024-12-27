@@ -34,12 +34,12 @@ setup_data<-function(df,
                 mutate(ReturnYear=ReturnYear+1) |>
                 mutate(across(contains("Age"),\(x)x=NA)))
     )()|>
+    # left_join(covariates,by="ReturnYear") |>
     tidyr::nest() %>% dplyr::mutate(n=dim(data[[1]])[1]) |>
     ## Slice the data to re-fit subsets of data with years trimmed off the end
     crossing(n_years=c(-(1:(n_forecasts+1)))) |>
     mutate(Actual=purrr::map2(data,n_years, ~dplyr::slice(.x, nrow(.x)+.y+1)),
            data=purrr::map2(data, n_years, ~return_to_brood(head(.x, n=.y),FALSE))) |>
-    ## the list of PC1 models sourced in `pc1_mods.r`
     crossing(tibble(model_name=names(mod_list),
                     model=mod_list),
              # the ages for which you want forecasts

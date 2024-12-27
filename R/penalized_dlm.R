@@ -1,66 +1,85 @@
 
 
-#data
 
-x<-rnorm(n_years)
+pen_dlm<-function(dat){
 
-y<-.5+x*(-2+rnorm(n_years,0,.1))
-
-dat<-dat |>  mutate(across(c(x,y),scale))
-
+options(na.action = "na.pass")
 mod_mat<-model.matrix(y~x,data=dat)
 
+n_coefs<-ncol(mod_mat)
+
+n_years<-nrow(mod_mat)
+
 data<-list(
-  y=dat$y,
-  mod_mat=mod_mat
+  y=head(dat,-1)$y,
+  mod_mat=mod_mat,
+  n_coefs=n_coefs,
+  n_years=n_years
 )
 
 
 #parameters
-n_coefs<-2
-
-n_years<-nrow(dat)
 
 
 params<-list(
-coef_inits=numeric(n_coefs)+.1,
-coef_inovations=matrix(.05,n_years,n_coefs),
 
-mean_log_sd = numeric(n_coefs)-1,
+coef_inits=numeric(n_coefs)+1,
+coef_inovations=matrix(.05,n_years-1,n_coefs),
 
-innov_log_sd = numeric(n_coefs)-1,
+mean_log_sd = numeric(n_coefs),
 
-resid_log_sd = -1
+innov_log_sd = numeric(n_coefs),
+
+resid_log_sd = 0
 )
 
 
 #likelihood
 f <- function(parms) {
-  getAll(data, parms, warn=FALSE)
+  "[<-" <- RTMB::ADoverload("[<-")
+  RTMB::getAll(data, parms, warn=FALSE)
+
 
 mean_sd<-exp(mean_log_sd)
 innov_sd<-exp(innov_log_sd)
 resid_sd<-exp(resid_log_sd)
-
+#
 nll<-0
-
-coefs<-matrix(NA,n_years,n_coefs)
-coefs[1,]<-coef_inits+coef_inovations[1,]
+#
+coefs<-matrix(0,n_years,n_coefs)
+coefs[1,]<-coef_inits
 for(i in 2:n_years){
-  coefs[i,]<-coefs[i-1,]+coef_inovations[i,]
+  coefs[i,]<-coefs[i-1,]+coef_inovations[i-1,]
 }
+
 
 for ( i in 1:n_coefs){
-  nll<-nll - sum(dnorm(coef_inovations[,i],0,innov_sd[i],log=TRUE)) # penalize year-to-year variations
+  nll<- nll - sum(RTMB::dnorm(coef_inovations[,i],0,innov_sd[i],log=TRUE)) # penalize year-to-year variations
 }
 
-nll<-nll - sum(dnorm(colMeans(coefs),0,mean_sd,log=TRUE)) #penalize mean of coefficients
-nll<-nll - sum(dexp(innov_sd,1,log=TRUE))
-nll<-nll - sum(dexp(mean_sd,1,log=TRUE))
+coef_means<-(RTMB::apply(coefs,2,mean))
+nll<-nll - sum(RTMB::dnorm(coef_means,0,mean_sd,log=TRUE)) #penalize mean of coefficients across years
+nll<-nll - sum(RTMB::dexp(innov_sd,1,log=TRUE)) -sum (innov_log_sd)
+nll<-nll - sum(RTMB::dexp(mean_sd,1,log=TRUE)) - sum(mean_log_sd)
 
-pred<-rowSums(coefs*mod_mat)
+pred<-RTMB::apply(coefs*mod_mat,1,sum)
 
-nll<- sum(dnorm(y,pred,resid_sd,log=TRUE))
-
+nll<- nll-sum(RTMB::dnorm((y),(head(pred,-1)),resid_sd,log=TRUE))
+RTMB::REPORT(pred)
+RTMB::REPORT(nll)
 nll
 }
+
+
+obj <- RTMB::MakeADFun(f, params,random=c("coef_inovations","coef_inits"),silent =TRUE)
+
+
+#optimize
+fit<-TMBhelper::fit_tmb(obj,newtonsteps =2,getJointPrecision  =FALSE,quiet =TRUE)
+
+return(list(
+  obj=obj,
+  fit=fit
+))
+}
+

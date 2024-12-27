@@ -4,7 +4,14 @@
 \alias{performance_weights}
 \title{Calculated weighted average forecasts}
 \usage{
-performance_weights(fits, perf_yrs = 15, wt_yrs = NULL)
+performance_weights(
+  fits,
+  perf_yrs = 15,
+  wt_yrs = NULL,
+  transformation = log,
+  inverse_transformation = exp,
+  scale_y = FALSE
+)
 }
 \arguments{
 \item{fits}{data frame returned by \code{fit_mods} function}
@@ -12,6 +19,12 @@ performance_weights(fits, perf_yrs = 15, wt_yrs = NULL)
 \item{perf_yrs}{maximum number of years of predictions to include in performance metrics. Set to infinity to use a stretching window.}
 
 \item{wt_yrs}{number of years of one-step-ahed predictions to use to calculate performance-based model weights (i.e., MAPE and RMSE). If null (the default) the same number of years is used to calculate weights as is used to evaluate performance of ensemble and individual models.}
+
+\item{transformation}{the trnasformation that was conducted on the response prior to fitting(default is log)}
+
+\item{inverse_transformation}{the inverse of the transformation that was conducted on the response prior to fitting (default is exp)}
+
+\item{scale_y}{boolean whether the response was scaled prior to fitting}
 }
 \value{
 a data frame with predictions from component models and weighted average models based on AICc, MAPE, and RMSE weights.
