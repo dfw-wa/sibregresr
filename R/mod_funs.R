@@ -1,6 +1,7 @@
 #' functions to build models
 #'
 #' @param include vector of names of models to include. Default is all options
+#' @param penDLM_formula an optional r formula object to pass to the penalized DLM model. Default is NULL, which would use the defaulte value formula("y~x") from the pen_dlm function.
 #'
 #' @return a list of functions that return (unoptimized) dlm model objects
 #'
@@ -26,7 +27,10 @@ mod_funs<-function(include=c(
   "tvCRzeroInt",
   "constCRzeroInt",
   "tvInt"
-)){
+),
+penDLM_formula=NULL,
+penDLM_exp_pen=NULL,
+penDLM_regu=NULL){
 
 #   # Constant Intercept-only model
 constIntOnly <- function(parm,x.mat){
@@ -77,6 +81,21 @@ tvInt <- function(parm, x.mat){
 }
 
 
+pen_dlm_out<-pen_dlm
+
+if(!is.null(penDLM_formula)){
+  formals(pen_dlm_out)$form<-penDLM_formula
+}
+
+if(!is.null(penDLM_exp_pen)){
+  formals(pen_dlm_out)$exp_pen<-penDLM_exp_pen
+}
+
+if(!is.null(penDLM_regu)){
+  formals(pen_dlm_out)$regu<-penDLM_regu
+}
+
+
 all_funs<-list(
   "constIntOnly" = constIntOnly,
   "tvIntOnly" = tvIntOnly,
@@ -86,7 +105,7 @@ all_funs<-list(
   "tvCRzeroInt" = tvCRzeroInt,
   "constCRzeroInt" = constCRzeroInt,
   "tvInt" = tvInt,
-  "PenDlm" = pen_dlm
+  "PenDlm" = pen_dlm_out
 )
 
 all_funs[include]

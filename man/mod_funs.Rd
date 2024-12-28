@@ -6,11 +6,16 @@
 \usage{
 mod_funs(
   include = c("constIntOnly", "tvIntOnly", "tvIntSlope", "tvSlope", "constLM",
-    "tvCRzeroInt", "constCRzeroInt", "tvInt")
+    "tvCRzeroInt", "constCRzeroInt", "tvInt"),
+  penDLM_formula = NULL,
+  penDLM_exp_pen = NULL,
+  penDLM_regu = NULL
 )
 }
 \arguments{
 \item{include}{vector of names of models to include. Default is all options}
+
+\item{penDLM_formula}{an optional r formula object to pass to the penalized DLM model. Default is NULL, which would use the defaulte value formula("y~x") from the pen_dlm function.}
 }
 \value{
 a list of functions that return (unoptimized) dlm model objects
