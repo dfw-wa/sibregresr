@@ -14,7 +14,7 @@
 #' @return tible
 #' @export
 fit_mods<-function(dat,transformation=log,scale_x=FALSE,scale_y=FALSE,
-                   covariates=tibble(year=numeric(0))){
+                   covariates=tibble(ReturnYear=numeric(0))){
 
   fits<-  dat |>
     mutate(
@@ -22,7 +22,8 @@ fit_mods<-function(dat,transformation=log,scale_x=FALSE,scale_y=FALSE,
                           dplyr::select(BroodYear, y=paste0("Age",.y), x=paste0("Age", .y-1)) |>
                           dplyr::filter(!is.na(x)) |>
                           dplyr::mutate(ReturnYear=BroodYear+.y) |>
-                          dplyr::left_join(covariates,by="ReturnYear")),
+                          dplyr::left_join(covariates,by="ReturnYear") |>
+                          dplyr::mutate(across(-c(ReturnYear,BroodYear,x,y),scale))),
       response_mu=purrr::map_dbl(xy_og,~mean(transformation(.x$y[.x$BroodYear!=max(.x$BroodYear)]))),
       response_sd=purrr::map_dbl(xy_og,~sd(transformation(.x$y[.x$BroodYear!=max(.x$BroodYear)]))),
       ## For the retrospective fits, replace the last y with NA to get forecasts

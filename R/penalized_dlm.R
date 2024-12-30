@@ -3,17 +3,18 @@
 
 #' penalized DLM in RTMB
 #'
-#' @param form formula specifying linear predictor
-#' @param exp_pen rate parameters for the exponential penalties on the standard deviation of the mean of the paramemets and the random walk innovations, respectively. Default is 5 and 5
-#' @param regu to avoid the standard deviations shrinking too small and running into numerical issues, the log of the standard deviation multiplied be these values are added to the log-likelihood (subtracted from the negative log-likelihood). Defaults are .01 and .01 for the two penalties.
 #' @param dat dataframe with response and predictors
+#' @param form formula specifying linear predictor
+#' @param regu to avoid the standard deviations shrinking too small and running into numerical issues, the log of the standard deviation multiplied be these values are added to the log-likelihood (subtracted from the negative log-likelihood). Defaults are .05 and .05 for the penalties on the mean of the coefficients and the year-to-year variability.
+#' @param gamma_shape shape paramter for the gamma prior on the expential distributions rate paramters.
+#' @param gamma_scale scale paramter for the gamma prior on the expential distributions rate paramters.
 #'
 #' @return a list with two components: the fitted TMB model object, which has the NLL and the linear predictors in the report(), as well as the outfut from the call to TMBhelper::fit_tmb(), which is used to optimize the model.
 #' @export
 #'
 #' @examples
-pen_dlm<-function(dat,form=formula("y~x"),exp_pen=c(5,5),
-                  regu=c(.01,.01)){
+pen_dlm<-function(dat,form=formula("y~x"),
+                  regu=c(.05,.05),gamma_shape=10,gamma_scale=1){
 
 options(na.action = "na.pass")
 mod_mat<-model.matrix(form,data=dat)
@@ -35,7 +36,10 @@ data<-list(
 
 params<-list(
 
+log_exp_rate= (numeric(2)+2),
+
 coef_inits=numeric(n_coefs)+1,
+
 coef_inovations=matrix(.05,n_years-1,n_coefs),
 
 mean_log_sd = numeric(n_coefs),
@@ -55,6 +59,7 @@ f <- function(parms) {
 mean_sd<-exp(mean_log_sd)
 innov_sd<-exp(innov_log_sd)
 resid_sd<-exp(resid_log_sd)
+exp_rate<-exp(log_exp_rate)
 #
 nll<-0
 #
@@ -71,9 +76,13 @@ for ( i in 1:n_coefs){
 
 coef_means<-(RTMB::apply(coefs,2,mean))
 nll<-nll - sum(RTMB::dnorm(coef_means,0,mean_sd,log=TRUE)) #penalize mean of coefficients across years
-nll<-nll - sum(RTMB::dexp(mean_sd,exp_pen[1],log=TRUE))- sum(regu[1]*mean_log_sd)
-nll<-nll - sum(RTMB::dexp(innov_sd,exp_pen[2],log=TRUE))- sum (regu[2]*innov_log_sd)
 
+
+
+nll<-nll - sum(RTMB::dexp(mean_sd,exp_rate[1],log=TRUE))- sum(regu[1]*mean_log_sd)
+nll<-nll - sum(RTMB::dexp(innov_sd,exp_rate[2],log=TRUE))- sum (regu[2]*innov_log_sd)
+
+nll<-nll - sum(RTMB::dgamma(x=exp_rate,shape=gamma_shape,scale=gamma_scale,log=TRUE))
 
 pred<-RTMB::apply(coefs*mod_mat,1,sum)
 
@@ -88,11 +97,38 @@ obj <- RTMB::MakeADFun(f, params,random=c("coef_inovations","coef_inits"),silent
 
 
 #optimize
-fit<-TMBhelper::fit_tmb(obj,newtonsteps =2,getJointPrecision  =FALSE,quiet =TRUE)
+
+parameter_estimates = nlminb(
+  start = obj$par,
+  objective = obj$fn,
+  gradient = obj$gr,
+  control =  list(eval.max = 1e4,
+                  iter.max = 1e4,
+                  trace = 0)
+)
+
+
+# Re-run to further decrease final gradient
+parameter_estimates = nlminb(
+  start = parameter_estimates$par,
+  objective = obj$fn,
+  gradient = obj$gr,
+  control =  list(eval.max = 1e4,
+                  iter.max = 1e4,
+                  trace = 0)
+)
+
+## Run some Newton steps
+for (i in 1:2) {
+  g = as.numeric(obj$gr(parameter_estimates$par))
+  h = optimHess(parameter_estimates$par, fn = obj$fn, gr = obj$gr)
+  parameter_estimates$par = parameter_estimates$par - solve(h, g)
+  parameter_estimates$objective = obj$fn(parameter_estimates$par)
+}
+
 
 return(list(
-  obj=obj,
-  fit=fit
+  obj=obj
 ))
 }
 

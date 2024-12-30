@@ -2,6 +2,9 @@
 #'
 #' @param include vector of names of models to include. Default is all options
 #' @param penDLM_formula an optional r formula object to pass to the penalized DLM model. Default is NULL, which would use the defaulte value formula("y~x") from the pen_dlm function.
+#' @param penDLM_regu scaler for the addition of the log of standard deviations to the log-likelihood as a regularizer. See penealized_dlm help for more details
+#' @param penDLM_gamma_shape shape parameter for the gamma prior on the exponential distribution rate parameter. See penealized_dlm help for more details
+#' @param penDLM_gamma_scale scale parameter for the gamma prior on the exponential distribution rate parameter.See penealized_dlm help for more details
 #'
 #' @return a list of functions that return (unoptimized) dlm model objects
 #'
@@ -29,8 +32,9 @@ mod_funs<-function(include=c(
   "tvInt"
 ),
 penDLM_formula=NULL,
-penDLM_exp_pen=NULL,
-penDLM_regu=NULL){
+penDLM_regu=NULL,
+penDLM_gamma_shape=NULL,
+penDLM_gamma_scale=NULL){
 
 #   # Constant Intercept-only model
 constIntOnly <- function(parm,x.mat){
@@ -87,12 +91,16 @@ if(!is.null(penDLM_formula)){
   formals(pen_dlm_out)$form<-penDLM_formula
 }
 
-if(!is.null(penDLM_exp_pen)){
-  formals(pen_dlm_out)$exp_pen<-penDLM_exp_pen
-}
-
 if(!is.null(penDLM_regu)){
   formals(pen_dlm_out)$regu<-penDLM_regu
+}
+
+if(!is.null(penDLM_gamma_shape)){
+  formals(pen_dlm_out)$gamma_shape<-penDLM_gamma_shape
+}
+
+if(!is.null(penDLM_gamma_scale)){
+  formals(pen_dlm_out)$gamma_scale<-penDLM_gamma_scale
 }
 
 

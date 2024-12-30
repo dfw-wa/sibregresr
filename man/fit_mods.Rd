@@ -9,7 +9,7 @@ fit_mods(
   transformation = log,
   scale_x = FALSE,
   scale_y = FALSE,
-  covariates = tibble(year = numeric(0))
+  covariates = tibble(ReturnYear = numeric(0))
 )
 }
 \arguments{
