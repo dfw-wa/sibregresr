@@ -4,6 +4,7 @@
 #' @param by_stock boolean for whether the data contians a Stock column.
 #'
 #' @return
+#' @export
 #'
 return_to_brood <- function(rt,by_stock=TRUE){
 
@@ -48,6 +49,7 @@ return_to_brood <- function(rt,by_stock=TRUE){
 #' @param bt brood table with column names: Stock, BroodYear, and for each age (e.g., Age3). Must be in that format.
 #'
 #' @return
+#' @export
 #'
 #' @examples
 brood_to_return <- function(bt){
@@ -90,7 +92,6 @@ get_npar <- function(build){
 #' @param npar number of parameters
 #'
 #' @return real, AICc
-#'
 #' @examples
 get_AIC <- function(y, mod, npar, mod_type="dlm"){
 
@@ -122,6 +123,7 @@ get_AIC <- function(y, mod, npar, mod_type="dlm"){
 #' @param window_size the maximum number of values to include in mean
 #'
 #' @return
+#' @export
 #'
 stretching_mean <- function(x, window_size = Inf) {
   n <- length(x)
@@ -149,6 +151,7 @@ stretching_mean <- function(x, window_size = Inf) {
 #' @param sample_sd boolean whether to subtract one from denominator so as to calculate a sample standard deviation. I think this would only be approporiate if bias correction were being applied.
 #'
 #' @return
+#' @export
 #'
 stretching_samp_sd <- function(x, window_size = Inf, sample_sd=FALSE) {
   n <- length(x)
