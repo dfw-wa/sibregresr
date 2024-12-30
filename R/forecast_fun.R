@@ -2,10 +2,16 @@
 #'
 #' @inheritParams mod_funs
 #' @inheritParams setup_data
+#' @inheritParams fit_mods
 #' @inheritParams performance_weights
 #' @inherit mod_funs details
 #' @inherit performance_weights details
-
+#' @param df
+#' @param include
+#' @param perf_yrs
+#' @param wt_yrs
+#' @param ... other arguments from `mod_funs` or `performance_weights`
+#'
 #' @return A tibble with ensemble forecasts, forecasts from component models, and performance measures
 #' @export
 #'
@@ -20,8 +26,14 @@ forecast_fun<-function(df=summer_chinook_2023,
   "constCRzeroInt",
   "tvInt"
 ) ,
+transformation = log,
+inverse_transformation = exp,
+scale_x = FALSE,
+scale_y = FALSE,
 perf_yrs = 15,
-wt_yrs = NULL){
+wt_yrs = NULL,
+...
+){
 
 
   if(is.null(wt_yrs)){

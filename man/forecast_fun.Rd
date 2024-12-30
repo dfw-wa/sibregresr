@@ -8,8 +8,13 @@ forecast_fun(
   df = summer_chinook_2023,
   include = c("constIntOnly", "tvIntOnly", "tvIntSlope", "tvSlope", "constLM",
     "tvCRzeroInt", "constCRzeroInt", "tvInt"),
+  transformation = log,
+  inverse_transformation = exp,
+  scale_x = FALSE,
+  scale_y = FALSE,
   perf_yrs = 15,
-  wt_yrs = NULL
+  wt_yrs = NULL,
+  ...
 )
 }
 \arguments{
@@ -17,9 +22,19 @@ forecast_fun(
 
 \item{include}{vector of names of models to include. Default is all options}
 
+\item{transformation}{transformation to be conducted on a response and predictors. default is log}
+
+\item{inverse_transformation}{the inverse of the transformation that was conducted on the response prior to fitting (default is exp)}
+
+\item{scale_x}{boolean whether to scale the predictor data prior to fitting}
+
+\item{scale_y}{boolean whether to scale the response data prior to fitting}
+
 \item{perf_yrs}{maximum number of years of predictions to include in performance metrics. Set to infinity to use a stretching window.}
 
 \item{wt_yrs}{number of years of one-step-ahed predictions to use to calculate performance-based model weights (i.e., MAPE and RMSE). If null (the default) the same number of years is used to calculate weights as is used to evaluate performance of ensemble and individual models.}
+
+\item{...}{other arguments from \code{mod_funs} or \code{performance_weights}}
 }
 \value{
 A tibble with ensemble forecasts, forecasts from component models, and performance measures
@@ -33,10 +48,11 @@ Model options are:
 \item constLM --	Sibling regression with constant slope and intercept.
 \item tvInt --	Sibling regression with  time-varying intercept.
 \item tvSlope --	Sibling regression with time-varying slope.
-\item tvIntSlope --	Sibling regression with time-varying slope and intercept.
+\item tvIntSlope --	Sibling regression with time-varying slope and intercept. This model is not inlcuded by default because it generally converges to one of the simpler model. In other words, it is exceedingly rare for the data to support this complex of a model and this including it in an ensemble leads to double weighting one of the simpler models.
 \item tvCRzeroInt --	Time varying "cohort ratio" model. Time varying slope, Intercept=0.
 \item constCRzeroInt --	Constant "cohort ratio" model. Constant slope, Intercept=0.
 \item tvIntOnly --	Time-varying Intercept-only model. Random walk on return, no sibling predictor.
 \item constIntOnly --	Constant Intercept-only model. Long-term average, no sibling predictor.
+\item PenDlm -- A dynamic linear model the like "tvIntSlope" but with penalized-complexity priors on the year-to-year variation and the mean of the covariate values. This model also can accommodate additional predictors (e.g., environmental covariates). This model is not included by defaults
 }
 }

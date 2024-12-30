@@ -14,17 +14,17 @@
 #' - constLM --	Sibling regression with constant slope and intercept.
 #' - tvInt --	Sibling regression with  time-varying intercept.
 #' - tvSlope --	Sibling regression with time-varying slope.
-#' - tvIntSlope --	Sibling regression with time-varying slope and intercept.
+#' - tvIntSlope --	Sibling regression with time-varying slope and intercept. This model is not inlcuded by default because it generally converges to one of the simpler model. In other words, it is exceedingly rare for the data to support this complex of a model and this including it in an ensemble leads to double weighting one of the simpler models.
 #' - tvCRzeroInt --	Time varying "cohort ratio" model. Time varying slope, Intercept=0.
 #' - constCRzeroInt --	Constant "cohort ratio" model. Constant slope, Intercept=0.
 #' - tvIntOnly --	Time-varying Intercept-only model. Random walk on return, no sibling predictor.
 #' - constIntOnly --	Constant Intercept-only model. Long-term average, no sibling predictor.
+#' - PenDlm -- A dynamic linear model the like "tvIntSlope" but with penalized-complexity priors on the year-to-year variation and the mean of the covariate values. This model also can accommodate additional predictors (e.g., environmental covariates). This model is not included by defaults
 #'
 #' @export
 mod_funs<-function(include=c(
   "constIntOnly",
   "tvIntOnly",
-  "tvIntSlope",
   "tvSlope",
   "constLM",
   "tvCRzeroInt",

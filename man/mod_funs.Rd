@@ -5,8 +5,8 @@
 \title{functions to build models}
 \usage{
 mod_funs(
-  include = c("constIntOnly", "tvIntOnly", "tvIntSlope", "tvSlope", "constLM",
-    "tvCRzeroInt", "constCRzeroInt", "tvInt"),
+  include = c("constIntOnly", "tvIntOnly", "tvSlope", "constLM", "tvCRzeroInt",
+    "constCRzeroInt", "tvInt"),
   penDLM_formula = NULL,
   penDLM_regu = NULL,
   penDLM_gamma_shape = NULL,
@@ -36,10 +36,11 @@ Model options are:
 \item constLM --	Sibling regression with constant slope and intercept.
 \item tvInt --	Sibling regression with  time-varying intercept.
 \item tvSlope --	Sibling regression with time-varying slope.
-\item tvIntSlope --	Sibling regression with time-varying slope and intercept.
+\item tvIntSlope --	Sibling regression with time-varying slope and intercept. This model is not inlcuded by default because it generally converges to one of the simpler model. In other words, it is exceedingly rare for the data to support this complex of a model and this including it in an ensemble leads to double weighting one of the simpler models.
 \item tvCRzeroInt --	Time varying "cohort ratio" model. Time varying slope, Intercept=0.
 \item constCRzeroInt --	Constant "cohort ratio" model. Constant slope, Intercept=0.
 \item tvIntOnly --	Time-varying Intercept-only model. Random walk on return, no sibling predictor.
 \item constIntOnly --	Constant Intercept-only model. Long-term average, no sibling predictor.
+\item PenDlm -- A dynamic linear model the like "tvIntSlope" but with penalized-complexity priors on the year-to-year variation and the mean of the covariate values. This model also can accommodate additional predictors (e.g., environmental covariates). This model is not included by defaults
 }
 }
