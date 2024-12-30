@@ -34,7 +34,7 @@ perf_yrs = 15,
 wt_yrs = NULL,
 ...
 ){
-
+  start_time<-Sys.time()
 
   if(is.null(wt_yrs)){
     wt_yrs2<-perf_yrs
@@ -68,6 +68,11 @@ wt_yrs = NULL,
   setup<-setup_data(df2,mod_list,n_forecasts = num_forecasts)
   fits<-fit_mods(setup)
   ensembles<-performance_weights(fits,perf_yrs,wt_yrs2)
+
+
+elapsed<-Sys.time()-start_time
+  print(paste("Time for model fitting was",round(elapsed,1),attr(elapsed, "units")))
+
   #add observations of minimum age for plotting
   ensembles |> dplyr::bind_rows(
 
