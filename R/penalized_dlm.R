@@ -1,6 +1,4 @@
 
-
-
 #' penalized DLM in RTMB
 #'
 #' @param dat dataframe with response and predictors
