@@ -15,6 +15,7 @@
 #' MAPE and RMSE weights are calculated as, for example:
 #'  MAPE^-1 / sum(MAPE^-1)
 #'
+#' - *model_name* is the name of the model used for forecast. It includes the compenent of the ensembles and the ensembles. Additionally, "best" is the model with the lowest MAPE over the perforance-evaluation period for a given year. Thgis is included to be be able to see the performance of picking the best-performaning model, whether than be an ensemble or one of the components, over multiple years. The "Model_name2" field indicates which model was the "best" for that year.
 #' - *n_wts* = the number of years of forecasts and observations that were used to generate MAPE and RMSE weights for ensemble forecasts.
 #' - Individual year metrics:
 #'     - *Er* = forecast error
@@ -157,7 +158,7 @@ performance_weights<-function(fits,
       log_sd = dplyr::lag(stretching_samp_sd(logQ,window_size=perf_yrs),1) # sample standard deviation in log space
     )|>
     dplyr::arrange(model_name,Stock,Age,ReturnYear) |>
-    dplyr::mutate(n_wts=ifelse(model_name%in%c("MAPE_weight_pred" ,"MeanSA_weight_pred", "RMSE_weight_pred" ),n_wts,NA),
+    dplyr::mutate(n_wts=ifelse(model_name%in%c("MAPE_weight" ,"MeanSA_weight", "RMSE_weight" ),n_wts,NA),
                   L90=exp(log(Pred)+qnorm(.05,0,log_sd)),
                   L50=exp(log(Pred)+qnorm(.25,0,log_sd)),
                   U50=exp(log(Pred)+qnorm(.75,0,log_sd)),

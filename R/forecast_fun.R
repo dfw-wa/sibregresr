@@ -15,11 +15,10 @@
 #' @return A tibble with ensemble forecasts, forecasts from component models, and performance measures
 #' @export
 #'
-forecast_fun<-function(df=summer_chinook_2023,
+forecast_fun<-function(df=summer_chinook_2024,
                        include=c(
   "constIntOnly",
   "tvIntOnly",
-  "tvIntSlope",
   "tvSlope",
   "constLM",
   "tvCRzeroInt",
@@ -74,10 +73,10 @@ elapsed<-Sys.time()-start_time
   print(paste("Time for model fitting was",round(elapsed,1),attr(elapsed, "units")))
 
   #add observations of minimum age for plotting
-  ensembles |> dplyr::bind_rows(
+  ensembles |> dplyr::full_join(
 
     df2 |>
-      dplyr::select(Stock,ReturnYear,Obs=paste0("Age",min_age)) |> dplyr::mutate(Age=min_age)
+      dplyr::select(Stock,ReturnYear,dplyr::contains("Age")) |> tidyr::pivot_longer(dplyr::contains("Age"),names_to="Age",values_to="Obs") |> mutate(Age=readr::parse_number(Age))
   )
 
 }

@@ -5,9 +5,9 @@
 \title{generate forecasts}
 \usage{
 forecast_fun(
-  df = summer_chinook_2023,
-  include = c("constIntOnly", "tvIntOnly", "tvIntSlope", "tvSlope", "constLM",
-    "tvCRzeroInt", "constCRzeroInt", "tvInt"),
+  df = summer_chinook_2024,
+  include = c("constIntOnly", "tvIntOnly", "tvSlope", "constLM", "tvCRzeroInt",
+    "constCRzeroInt", "tvInt"),
   transformation = log,
   inverse_transformation = exp,
   scale_x = FALSE,

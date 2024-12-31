@@ -38,6 +38,7 @@ $exp(-.5 deltaAICc) / sum(exp(-.5 deltaAICc))$
 MAPE and RMSE weights are calculated as, for example:
 MAPE^-1 / sum(MAPE^-1)
 \itemize{
+\item \emph{model_name} is the name of the model used for forecast. It includes the compenent of the ensembles and the ensembles. Additionally, "best" is the model with the lowest MAPE over the perforance-evaluation period for a given year. Thgis is included to be be able to see the performance of picking the best-performaning model, whether than be an ensemble or one of the components, over multiple years. The "Model_name2" field indicates which model was the "best" for that year.
 \item \emph{n_wts} = the number of years of forecasts and observations that were used to generate MAPE and RMSE weights for ensemble forecasts.
 \item Individual year metrics:
 \itemize{
