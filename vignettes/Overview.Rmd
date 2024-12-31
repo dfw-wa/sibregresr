@@ -1,0 +1,63 @@
+---
+title: "Overview"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Overview}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(sibregresr)
+```
+
+## Introduction
+
+This package is meant to forecast salmon returns. The core functions produce model average predictions (i.e., ensembles) of dynamic linear models with sibling predictors. The package also has functionality to forecast using dynamic linear models with penalized-complexity priors, which can be an alternative to model averaging.
+
+## Quick start
+
+Forecasts can be fit using the `forecast_fun()` function. One must provide the function with a dataframe of age-specific returns by either brood- or return year, using specific column names. For example:
+
+```{r}
+summer_chinook_2024
+```
+
+or
+
+```{r}
+brood_to_return(summer_chinook_2024)
+```
+
+If multiple Stocks are included in the data, forecasting will be conducted for each of the stocks. 
+
+Below is a call to the wrapper function that conducts forecasting. The arguments in the below code are set to the defaults, which includes 7 models in the ensembles, log transforms the response and predictor, and does not scale the predictor and response prior to fitting. Models can  be fit in normal space by specifying `transformation = identity` and `inverse_transformation = identity`. The response and predictors can be Z-scored prior to fitting by specifying `scale_y = TRUE` and `scale_x = TRUE`.
+
+The `perf_yrs` argument specified how many one-year-ahead forecasts to conduct in order to assess performance of the model. The `wt_yrs` argument specified how many one-year-ahead forecasts to use for performance-based model averaging (e.g., weighting based on MAPE). When `wr_yrs` is NULL, the number of `perf_yrs` is also used for `wt_yrs`. However, they don't encessarily need to be the same. One could specify `perf_yrs = 15` and `wt_yrs = 1` to conduct and 15-year performance evaluation of the approach of weighting models based on solely on their performance in the previous year. It is also possible to use a stretching window rather than a sliding winder (i.e., include all available years for performance and/or weighting) by setting the numbers at or above the total number of years in the data.
+
+If `perf_yrs = 15` and `wt_yrs = 15` then 31 years of one-step ahead forecasts for each component model (i.e., not the ensemble) are needed. This is because 15 forecasts are needed to calculate the weights for the first ensemble forecast and so on. Therefore, if the dataset only has 30 years of observations, one should choose a combination of `perf_yrs` and `wt_yrs` that requires fewer forecasts. A call to `forecast_fun()` will produce a warning if the number of forecasts needed are greater that the number of data points minus five (assuming at least five years should be available to produce the first forecast). 
+
+```{r message=FALSE, warning=FALSE}
+
+forecast<-forecast_fun(
+  df = summer_chinook_2024,
+  include = c("constIntOnly", "tvIntOnly", "tvSlope", "constLM",
+    "tvCRzeroInt", "constCRzeroInt", "tvInt"),
+  transformation = log,
+  inverse_transformation = exp,
+  scale_x = FALSE,
+  scale_y = FALSE,
+  perf_yrs = 15,
+  wt_yrs = NULL,
+)
+
+```
+
+The output of a call to the `forecast_fun()` function is a dataframe with a row for every year, age, stock, and model, including model averages. Included in the dataframe are the observed and forecasted returns as well as several performance metrics. Definitions for all of the variables in the dataframe are prodived in the documentation for the `performance_weights()` function, which can be accessed with a call to `?performance_weights()`. Prediction intervals are based on the standard deviation between one-year ahead predictions (i.e., forecasts) and observations in log space. The number of years included in the standard deviation calculations is the minimum of the number of years available or the values specified for `perf_yrs`. For example, if `perf_yrs = 15` but only three years of an ensemble forecast had been generated prior to a given year, those three years would be used to calculate the forecast standard deviation and prediction intervals, however, in 20 years of the ensemble forecast were available, only the most recent 15 would be used. The "n_sd" field in the output of a call to `forecast_fun()` procides the number of years that used to calculate prediction intervals for that forecast. The number of years used to calculate weights for an ensemble forecast is conducted in the same way (i.e., all available up to "wt_yrs") and the "n_wts" field in the output gives the number of years used. This is not relevant for ensembles based on AICc weighting as they are based on the AICc value for models fit for the current year.
