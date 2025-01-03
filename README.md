@@ -7,8 +7,8 @@ of dynamic linear models (DLMs) with sibling predictors. The package
 also has functionality to forecast using DLMs with penalized-complexity
 priors, which can be an alternative to model averaging.
 
-See the *Overview* reference article for more details and information on
-package functionality.
+See the *Overview* article for more details and information on package
+functionality.
 
 ## Installation
 
@@ -26,7 +26,7 @@ regression DLM and evaluating performance over 15 years. A beta version
 plotting and table function are called to view the ensemble forecasts
 with weights based on mean absolute percent errors.
 
-See the *Overview* reference article for more details and examples.
+See the *Overview* article for more details and examples.
 
 ``` r
 library(sibregresr)
@@ -42,7 +42,7 @@ forecast<-forecast_fun(
   perf_yrs = 15,
   wt_yrs = NULL,
 )
-#> [1] "Time for model fitting was 15.7 secs"
+#> [1] "Time for model fitting was 18.2 secs"
 
 make_table(forecast$forecasts,"MAPE_weight")
 ```

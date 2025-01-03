@@ -187,6 +187,7 @@ $$ \bar\beta, ~\sigma \sim \text{exp}(\lambda)\\
 $$
 Additionally, $0.05*\text{log}(\sigma)$ for all $\sigma$s is added to the log-likelihood to keep their values from shrinking so small as to cause numerical problems during optimization.
 
+### Non-sibling (e.g., climate) predictors
 
 One can change the predictors for the penalized dlm model by providing a data frame of predictor values by return year with a column called "ReturnYear" or by brood year with "BroodYear" for joining with the salmon return data. For example
 
