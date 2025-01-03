@@ -1,14 +1,18 @@
 
 # sibregresr
 
-The goal of sibregresr is to predict salmon returns using sibling
-regression. The regressions are conducted within a dynamic linear
-modeling framework and model averaging is used.
+This package is for forecasting salmon returns using sibling regression.
+The core functions produce model average predictions (i.e., ensembles)
+of dynamic linear models (DLMs) with sibling predictors. The package
+also has functionality to forecast using DLMs with penalized-complexity
+priors, which can be an alternative to model averaging.
+
+See the *Overview* reference article for more details and information on
+package functionality.
 
 ## Installation
 
-You can install the development version of sibregresr from
-[GitHub](https://github.com/) with:
+You can install sibregresr from [GitHub](https://github.com/) with:
 
 ``` r
 # install.packages("devtools")
@@ -16,6 +20,13 @@ devtools::install_github("wdfw-fp/sibregresr")
 ```
 
 ## Example
+
+Below is an example of fitting an ensemble of 7 variations on a sibling
+regression DLM and evaluating performance over 15 years. A beta version
+plotting and table function are called to view the ensemble forecasts
+with weights based on mean absolute percent errors.
+
+See the *Overview* reference article for more details and examples.
 
 ``` r
 library(sibregresr)
@@ -31,7 +42,7 @@ forecast<-forecast_fun(
   perf_yrs = 15,
   wt_yrs = NULL,
 )
-#> [1] "Time for model fitting was 15.2 secs"
+#> [1] "Time for model fitting was 15.7 secs"
 
 make_table(forecast$forecasts,"MAPE_weight")
 ```
