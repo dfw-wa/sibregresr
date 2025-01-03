@@ -16,13 +16,21 @@
 fit_mods<-function(dat,transformation=log,scale_x=FALSE,scale_y=FALSE,
                    covariates=tibble(ReturnYear=numeric(0))){
 
+
+  cov_join_col<-colnames(covariates)[colnames(covariates)=="ReturnYear"|colnames(covariates)=="BroodYear"]
+
+
+  if(("PenDLM"%in%unique(dat$model_name)) & !(scale_x & scale_y)){
+    warning("It is highly recomended to scale the response and predictors when fitting the penalized DLM.")
+  }
+
   fits<-  dat |>
     mutate(
       xy_og=purrr::map2(data,Age, ~.x |>
                           dplyr::select(BroodYear, y=paste0("Age",.y), x=paste0("Age", .y-1)) |>
                           dplyr::filter(!is.na(x)) |>
                           dplyr::mutate(ReturnYear=BroodYear+.y) |>
-                          dplyr::left_join(covariates,by="ReturnYear") |>
+                          dplyr::left_join(covariates,by=cov_join_col) |>
                           dplyr::mutate(across(-c(ReturnYear,BroodYear,x,y),scale))),
       response_mu=purrr::map_dbl(xy_og,~mean(transformation(.x$y[.x$BroodYear!=max(.x$BroodYear)]))),
       response_sd=purrr::map_dbl(xy_og,~sd(transformation(.x$y[.x$BroodYear!=max(.x$BroodYear)]))),

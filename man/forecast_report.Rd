@@ -10,31 +10,53 @@ forecast_report(
   stocks = NULL,
   forecast_year = NULL,
   df = NULL,
-  include = NULL,
-  perf_yrs = NULL,
+  include = c("constIntOnly", "tvIntOnly", "tvSlope", "constLM", "tvCRzeroInt",
+    "constCRzeroInt", "tvInt"),
+  transformation = log,
+  inverse_transformation = exp,
+  scale_x = FALSE,
+  scale_y = FALSE,
+  perf_yrs = 15,
   wt_yrs = NULL,
   output_file = "Forcast report.docx",
-  output_dir = getwd()
+  output_dir = getwd(),
+  ...
 )
 }
 \arguments{
-\item{forecasts}{output of a call to \code{forecaste_fun}}
+\item{forecasts}{an the output of a call to \code{forecast_fun()} or \code{performance_weights}}
 
-\item{mod_name}{name of the model that you want to plot forecasts for. options are:
-"AICc_weight" ,"MAPE_weight","MeanSA_weight","RMSE_weight","constIntOnly","tvIntOnly","tvIntSlope","tvSlope","constLM","tvCRzeroInt","constCRzeroInt",or "tvInt"}
+\item{mod_name}{the forecast model / ensemble type  to report forecasts from}
 
-\item{forecast_year}{years to include in the table. default ot the last forecasts year in forecasts input}
+\item{stocks}{vector of names of stocks to include in report}
+
+\item{forecast_year}{the year to report forecast for}
 
 \item{df}{Input data. Either a return table or a brood table. Column names: Stock, ReturnYear (or BroodYear), and for each age (e.g., Age3). Must be in that format.}
 
 \item{include}{vector of names of models to include. Default is all options}
 
+\item{transformation}{transformation to be conducted on a response and predictors. default is log}
+
+\item{inverse_transformation}{the inverse of the transformation that was conducted on the response prior to fitting (default is exp)}
+
+\item{scale_x}{boolean whether to scale the predictor data prior to fitting}
+
+\item{scale_y}{boolean whether to scale the response data prior to fitting}
+
 \item{perf_yrs}{maximum number of years of predictions to include in performance metrics. Set to infinity to use a stretching window.}
 
 \item{wt_yrs}{number of years of one-step-ahed predictions to use to calculate performance-based model weights (i.e., MAPE and RMSE). If null (the default) the same number of years is used to calculate weights as is used to evaluate performance of ensemble and individual models.}
 
-\item{output_dir}{}
+\item{output_file}{name of output file}
+
+\item{output_dir}{directory for output file}
+
+\item{...}{other arguments from \code{mod_funs} or \code{performance_weights}}
+}
+\value{
+a knitted Rmarkdown document
 }
 \description{
-Render a report of forecast results
+There are two options: 1) provide an the output of a call to \code{forecast_fun()}or \code{performance_weights()} or 2) provide raw data and the specify the arguments as needed for a call to \code{forecast_fun()}
 }

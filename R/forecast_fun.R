@@ -12,7 +12,7 @@
 #' @param wt_yrs
 #' @param ... other arguments from `mod_funs` or `performance_weights`
 #'
-#' @return A tibble with ensemble forecasts, forecasts from component models, and performance measures
+#' @return A list of two dataframes: *fits* is the output of the call to `fit_mods()` and potentially useful information about models that failed to fit. *forecasts* is the output of a call to `performance_weights()` with ensemble forecasts, forecasts from component models, and performance measures
 #' @export
 #'
 forecast_fun<-function(df=summer_chinook_2024,
@@ -31,6 +31,7 @@ scale_x = FALSE,
 scale_y = FALSE,
 perf_yrs = 15,
 wt_yrs = NULL,
+covariates = tibble(ReturnYear=numeric(0)),
 ...
 ){
   start_time<-Sys.time()
@@ -53,7 +54,7 @@ wt_yrs = NULL,
     num_forecasts<-nrow(df)-5
     warning(paste("wt_yrs + perf_yrs is greater the number of years of observation minus 5. Only",num_forecasts,"will be made for model averaging and evaluation." ))
   }else{
-    num_forecasts<-wt_yrs2+perf_yrs
+    num_forecasts<-wt_yrs2+perf_yrs+1
   }
 
 
@@ -63,20 +64,28 @@ wt_yrs = NULL,
   min_age<- sort(as.numeric(substr(colnames(df2)[grepl("Age",colnames(df2))],4,4)))[1]
 
 
-  mod_list<-mod_funs(include)
+  mod_list<-mod_funs(include,...)
   setup<-setup_data(df2,mod_list,n_forecasts = num_forecasts)
-  fits<-fit_mods(setup)
-  ensembles<-performance_weights(fits,perf_yrs,wt_yrs2)
+  fits<-fit_mods(setup,transformation,scale_x,scale_y,covariates)
+  ensembles<-performance_weights(fits,
+                                 perf_yrs,
+                                 wt_yrs2,
+                                 transformation,
+                                 inverse_transformation,
+                                 scale_y)
 
 
 elapsed<-Sys.time()-start_time
   print(paste("Time for model fitting was",round(elapsed,1),attr(elapsed, "units")))
 
   #add observations of minimum age for plotting
-  ensembles |> dplyr::full_join(
+  ensembles<-ensembles |> dplyr::full_join(
 
     df2 |>
-      dplyr::select(Stock,ReturnYear,dplyr::contains("Age")) |> tidyr::pivot_longer(dplyr::contains("Age"),names_to="Age",values_to="Obs") |> mutate(Age=readr::parse_number(Age))
+      dplyr::select(Stock,ReturnYear,dplyr::contains("Age")) |> tidyr::pivot_longer(dplyr::contains("Age"),names_to="Age",values_to="Obs") |> mutate(Age=readr::parse_number(Age)),
+    by=c("Stock", "Age", "ReturnYear", "Obs")
   )
 
+  list(fits=fits,
+       forecasts=ensembles)
 }

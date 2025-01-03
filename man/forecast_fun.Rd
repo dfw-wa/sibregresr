@@ -14,6 +14,7 @@ forecast_fun(
   scale_y = FALSE,
   perf_yrs = 15,
   wt_yrs = NULL,
+  covariates = tibble(ReturnYear = numeric(0)),
   ...
 )
 }
@@ -33,6 +34,8 @@ forecast_fun(
 \item{perf_yrs}{maximum number of years of predictions to include in performance metrics. Set to infinity to use a stretching window.}
 
 \item{wt_yrs}{number of years of one-step-ahed predictions to use to calculate performance-based model weights (i.e., MAPE and RMSE). If null (the default) the same number of years is used to calculate weights as is used to evaluate performance of ensemble and individual models.}
+
+\item{covariates}{data frame of covariates to add to data. must contain "ReturnYear" field, which is used to perform the join with the salmon return data.}
 
 \item{...}{other arguments from \code{mod_funs} or \code{performance_weights}}
 }

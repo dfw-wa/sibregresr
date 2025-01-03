@@ -17,6 +17,7 @@ BugReports: https://github.com/wdfw-fp/sibregresr/issues
 Imports: 
     dlm,
     dplyr,
+    magrittr,
     purrr,
     readr,
     rlang,
