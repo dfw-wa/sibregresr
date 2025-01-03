@@ -6,22 +6,23 @@
 \alias{sibregresr-package}
 \title{sibregresr: Sibling Regression Salmon Forecasting}
 \description{
-This package generates salmon return forecasts based on ensembles of sibling regression dynamic linear models.
+This package generates salmon return forecasts based on (ensembles of) sibling regression dynamic linear models.
 }
 \seealso{
 Useful links:
 \itemize{
   \item \url{https://github.com/wdfw-fp/sibregresr}
+  \item \url{https://wdfw-fp.github.io/sibregresr/}
   \item Report bugs at \url{https://github.com/wdfw-fp/sibregresr/issues}
 }
 
 }
 \author{
-\strong{Maintainer}: Ben Cox \email{Ben.Cox@dfw.wa.gov} (\href{https://orcid.org/0000-0001-5073-8052}{ORCID})
+\strong{Maintainer}: Mark Sorel \email{mark.sorel@dfw.wa.gov} (\href{https://orcid.org/0000-0001-5073-8052}{ORCID})
 
 Authors:
 \itemize{
-  \item Mark Sorel \email{mark.sorel@dfw.wa.gov} (\href{https://orcid.org/0000-0001-5073-8052}{ORCID})
+  \item Ben Cox \email{Ben.Cox@dfw.wa.gov} (\href{https://orcid.org/0000-0001-5073-8052}{ORCID})
 }
 
 }

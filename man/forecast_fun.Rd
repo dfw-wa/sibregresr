@@ -40,7 +40,7 @@ forecast_fun(
 \item{...}{other arguments from \code{mod_funs} or \code{performance_weights}}
 }
 \value{
-A tibble with ensemble forecasts, forecasts from component models, and performance measures
+A list of two dataframes: \emph{fits} is the output of the call to \code{fit_mods()} and potentially useful information about models that failed to fit. \emph{forecasts} is the output of a call to \code{performance_weights()} with ensemble forecasts, forecasts from component models, and performance measures
 }
 \description{
 generate forecasts
