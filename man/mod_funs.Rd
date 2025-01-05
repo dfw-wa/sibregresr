@@ -31,12 +31,17 @@ a list of functions that return (unoptimized) dlm model objects
 functions to build models
 }
 \details{
+The models available in this package are variations of a sibling regression model with time-varying intercept and slope:
+\deqn{\left\{\begin{aligned}\mathrm{log}(y_{a,t}) & =\alpha_t + \mathrm{log}(y_{a-1,t-1}) \beta_t + v_t, & \quad &v_t \sim \mathcal{N}\left(0, V_t\right), \\\alpha_t & = \alpha_{t-1} + w_{\alpha, t}, & \quad & w_{\alpha, t} \sim \mathcal{N}\left(0, W_{\alpha, t}\right), \\\beta_t & = \beta_{t-1} + w_{\beta, t}, & \quad & w_{\beta, t} \sim \mathcal{N}\left(0, W_{\beta, t}\right),\end{aligned}\right.}
+
+where \eqn{\alpha_t} and \eqn{\beta_t} are an intercept and a slope for returns of the previous age in the previous year, respectively, and both are allowed to vary across years as random walks with process error variances \eqn{w_{\alpha, t}} and \eqn{w_{\beta, t}} respectively. The residual \eqn{v_t} is assumed to be normally distributed around zero with variance \eqn{V_t}. Together with a vague prior distribution for the values of \eqn{\alpha_0} and \eqn{\beta_0} (the slope and intercept prior to the first year) these equations define the "full" sibling regression models. However, this "full" model may be overly complex for optimal prediction, and is difficult to fit in practice. Simplified versions of this model are included, as described below.
+
 Model options are:
 \itemize{
 \item constLM --	Sibling regression with constant slope and intercept.
 \item tvInt --	Sibling regression with  time-varying intercept.
 \item tvSlope --	Sibling regression with time-varying slope.
-\item tvIntSlope --	Sibling regression with time-varying slope and intercept. This model is not inlcuded by default because it generally converges to one of the simpler model. In other words, it is exceedingly rare for the data to support this complex of a model and this including it in an ensemble leads to double weighting one of the simpler models.
+\item tvIntSlope --	Sibling regression with time-varying slope and intercept (i.e., the "full" mode). This model is not included by default because it generally converges to one of the simpler model. In other words, it is exceedingly rare for the data to support this complex of a model and this including it in an ensemble leads to double weighting one of the simpler models.
 \item tvCRzeroInt --	Time varying "cohort ratio" model. Time varying slope, Intercept=0.
 \item constCRzeroInt --	Constant "cohort ratio" model. Constant slope, Intercept=0.
 \item tvIntOnly --	Time-varying Intercept-only model. Random walk on return, no sibling predictor.

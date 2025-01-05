@@ -255,7 +255,7 @@ $$
 or based on their observed performance $\mathrm{Perf}$ in previous years as measured by the reciprocal of mean absolute percent error (MAPE),  root mean square error (RMSE), or mean symmetric accuracy (MeanSA).
 
 $$
-w_m=\frac{\mathrm{Perf}_m^{-1}}{\sum_{i \in \mathcal{M}} \mathrm{Perf}_i^{-1}},
+?,
 $$
 
 
