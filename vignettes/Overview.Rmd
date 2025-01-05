@@ -77,12 +77,11 @@ forecast<-forecast_fun(
 
 ```
 
-
 The arguments in the above call are set to the defaults, which includes 7 models in the ensembles, log transforms the response and predictor, and does not scale the predictor and response prior to fitting. Models can be fit in normal space by specifying `transformation = identity` and `inverse_transformation = identity`. The response and predictors can be Z-scored prior to fitting by specifying `scale_y = TRUE` and `scale_x = TRUE`.
 
 The `perf_yrs` argument specifies how many one-year-ahead forecasts to conduct in order to assess performance of the model. The `wt_yrs` argument specifies how many one-year-ahead forecasts to use for performance-based model averaging (e.g., weighting based on MAPE). When `wt_yrs` is NULL, the number of `perf_yrs` is also used for `wt_yrs`. However, they don't encessarily need to be the same. One could specify `perf_yrs = 15` and `wt_yrs = 1` to conduct a 15-year performance evaluation of the approach of weighting models based on their performance solely in the previous year. It is also possible to use a stretching window rather than a sliding window (i.e., include all available years for performance and/or weighting) by setting `perf_yrs` and/or `wt_yrs` at or above the total number of years in the data.
 
-If `perf_yrs = 15` and `wt_yrs = 15` then `perf_yrs` + `wt_yres` + 1 = 31 years of one-step ahead forecasts for each component (i.e., not the ensemble) model are needed for performance-based model weighting. This is because the first of the 15 years of performance-based ensemble forecasts uses weights based on performance of the components in the previous 15 years.  A call to `forecast_fun()` will produce a warning if the number of forecasts needed is greater that the number of data points minus five (assuming at least five years should be available to produce the first forecast).
+If `perf_yrs = 15` and `wt_yrs = 15` then `perf_yrs` + `wt_yres` + 1 = 31 years of one-step ahead forecasts for each component (i.e., not the ensemble) model are needed for performance-based model weighting. This is because the first of the 15 years of performance-based ensemble forecasts uses weights based on performance of the components in the previous 15 years. A call to `forecast_fun()` will produce a warning if the number of forecasts needed is greater that the number of data points minus five (assuming at least five years should be available to produce the first forecast).
 
 ### Output
 
@@ -97,7 +96,7 @@ forecast$forecasts |> dplyr::filter(ReturnYear==max(ReturnYear),grepl("weight",m
 
 #### Prediction intervals
 
-Prediction intervals are based on the standard deviation between one-year ahead predictions (i.e., forecasts) and observations in log space. The number of years included in the standard deviation calculations is the minimum of the number of years available or the values specified for `perf_yrs`. For example, if `perf_yrs = 15` but only three years of an ensemble forecast had been generated prior to a given year, those three years would be used to calculate the forecast standard deviation and prediction intervals, however, if 20 years of the ensemble forecast were available, only the most recent 15 years would be used. The "n_sd" field in the output of a call to `forecast_fun()` provides the number of years used to calculate prediction intervals for that forecast. The number of years used to calculate weights for an ensemble forecast is conducted in the same way (i.e., all available up to "wt_yrs") and the "n_wts" field in the output gives the number of years used. This is not relevant for ensembles based on AICc weighting as they are based on the AICc value for models fit for the current year. 
+Prediction intervals are based on the standard deviation between one-year ahead predictions (i.e., forecasts) and observations in log space. The number of years included in the standard deviation calculations is the minimum of the number of years available or the values specified for `perf_yrs`. For example, if `perf_yrs = 15` but only three years of an ensemble forecast had been generated prior to a given year, those three years would be used to calculate the forecast standard deviation and prediction intervals, however, if 20 years of the ensemble forecast were available, only the most recent 15 years would be used. The "n_sd" field in the output of a call to `forecast_fun()` provides the number of years used to calculate prediction intervals for that forecast. The number of years used to calculate weights for an ensemble forecast is conducted in the same way (i.e., all available up to "wt_yrs") and the "n_wts" field in the output gives the number of years used. This is not relevant for ensembles based on AICc weighting as they are based on the AICc value for models fit for the current year.
 
 ### Plotting and reporting (beta version)
 
@@ -107,7 +106,7 @@ I've also included a plotting function for predictions from a given model with 5
 make_plot(forecast$forecasts,"MAPE_weight")
 ```
 
-Also a function for a high-level table. 
+Also a function for a high-level table.
 
 ```{r}
 make_table(forecast$forecasts,"MAPE_weight")
@@ -126,15 +125,14 @@ forecast_report(forecast$forecasts,
 
 but you can also feed the `forecast_report()` function the raw data and the arguments that you would feed to `forecast_fun()` in order to do it all in one function call. The disadvantage of this is that you will only get the output for one model (e.g., "MAPE_weight") wheras if you fit save the output from a call to `forecast_fun()`, you can investigate them all and render report for multiple models if desired without having to refit.
 
-
 ## Under the `Forecast_fun()` hood
 
 The `Forecast_fun()` is a wrapper around the `mod_funs()`,`setup_data()`,`fit_mods()`, and `performance_weights()` functions.
 
-- `mod_funs()` generates a list of functions that fit individual models. This list is passed to,
-- `setup_data()`, which generates a nested data frame with a row for each combination of subset of the data (i.e., with some number of years cutoff the end) and model. Each row represents a model that must be fit and prediction made, and this function kicks off the process using a list-column workflow.
-- The `fit_mods()` function does a few data transformation steps and conducts the model fitting.
-- Finally, the `performance_weights()` function uses the fitted model objects to produce forecasts, assesses performance, generates ensembles, and generates preduction intervals.
+-   `mod_funs()` generates a list of functions that fit individual models. This list is passed to,
+-   `setup_data()`, which generates a nested data frame with a row for each combination of subset of the data (i.e., with some number of years cutoff the end) and model. Each row represents a model that must be fit and prediction made, and this function kicks off the process using a list-column workflow.
+-   The `fit_mods()` function does a few data transformation steps and conducts the model fitting.
+-   Finally, the `performance_weights()` function uses the fitted model objects to produce forecasts, assesses performance, generates ensembles, and generates preduction intervals.
 
 A similar output as generated by `Forecast_fun()` above could be generated by the following code
 
@@ -151,7 +149,6 @@ forecasts<-performance_weights(fits,perf_yrs = 15)
 ```
 
 with the only difference being that the `Forecast_fun()` function appends the observations in years for which forecasts were not produced to the output.
-
 
 ## Penalized complexity models
 
@@ -175,21 +172,24 @@ pen_dlm_forecast$forecasts |> dplyr::filter(ReturnYear==max(ReturnYear),model_na
 The penalized complexity model puts penalties on the mean of the coefficients $\beta_t$ for each year $t$ and the standard deviation of the steps in the random walk. So if the coefficients are:
 
 $$
-\beta_t = \beta_{t-1} + \omega_t \\
-\omega_t \sim \mathcal{N}(0,\sigma)
+\begin{aligned}
+\beta_t &= \beta_{t-1} + \omega_t \\
+\omega_t &\sim \mathcal{N}(0,\sigma)
+\end{aligned}
 $$
 
 This model puts exponential-gamma penalties on all $\bar{\beta}$ and $\sigma$:
 
 $$
-\bar{\beta}, ~\sigma \sim \text{exp}(\lambda) \\
-\lambda \sim \text{Gamma}(\text{Shape}=10,~ \text{Scale}=1)
+\begin{aligned}
+\bar{\beta}, ~\sigma &\sim \exp(\lambda) \\
+\lambda &\sim \text{Gamma}(\text{shape}=10,~ \text{scale}=1)
+\end{aligned}
 $$
 
-where two unique $\lambda$ parameters are fit for every predictor in the model.  
+where two unique $\lambda$ parameters are fit for every predictor in the model.
 
 Additionally, $0.05*\text{log}(\bar{\beta}, \sigma)$ for all $\bar{\beta}$s and $\sigma$s is added to the log-likelihood to keep their values from shrinking so small as to cause numerical problems during optimization.
-
 
 ### Non-sibling (e.g., climate) predictors
 
@@ -224,14 +224,11 @@ dplyr::select(Stock,Pred,MAPE,RMSE,MPE,MEr) |> dplyr::arrange(Stock,Age,MAPE)|> 
 
 ```
 
-The shape and scale parameters of the gamma prior can be controlled with the  `penDLM_gamma_shape` and `penDLM_gamma_scale` arguments to `mod_funs()` or `forecast_fun()`. The fraction of the log of the $\sigma$s that is added to the log-likelihood can be controlled with the `penDLM_regu` argument.
-
-
+The shape and scale parameters of the gamma prior can be controlled with the `penDLM_gamma_shape` and `penDLM_gamma_scale` arguments to `mod_funs()` or `forecast_fun()`. The fraction of the log of the $\sigma$s that is added to the log-likelihood can be controlled with the `penDLM_regu` argument.
 
 ## More general description of the modeling process
 
 The first step in forecasting the returns of a given stock $y_{a,t}$ of age $a$ in year $t$ is to fit models to observed returns through year $t-1$. The models available in this package are variations of a sibling regression model with time-varying intercept and slope:
-
 
 $$
 \left\{
@@ -242,7 +239,6 @@ $$
 \end{aligned}
 \right.
 $$
-
 
 where $\alpha_t$ and $\beta_t$ are an intercept and a slope for the log-transformed returns of the previous age in the previous year, respectively, and both are allowed to vary across years as random walks with process error variances $w_{\alpha, t}$ and $w_{\beta, t}$ respectively. The residual $v_t$ is assumed to be normally distributed around zero with variance $V_t$. Together with a vague prior distribution for the values of $\alpha_0$ and $\beta_0$ (the slope and intercept prior to the first year) these equations define the "full" sibling regression models. However, this "full" model may be overly complex for optimal prediction, and is difficult to fit in practice.
 
@@ -259,21 +255,16 @@ $$
 w_m=\frac{e^{-0.5\left(\mathrm{AIC}_m-\mathrm{AIC}_{\min }\right)}}{\sum_{i \in \mathcal{M}} e^{-0.5\left(\mathrm{AIC}_i-\mathrm{AIC}_{\min }\right)}},
 $$
 
-
-or based on their observed performance in previous years as measured by the reciprocal of mean absolute percent error (MAPE),  root mean square error (RMSE), or mean symmetric accuracy (MeanSA). For example,
+or based on their observed performance in previous years as measured by the reciprocal of mean absolute percent error (MAPE), root mean square error (RMSE), or mean symmetric accuracy (MeanSA). For example,
 
 $$
 w_m=\frac{\mathrm{MAPE}_m^{-1}}{\sum_{i \in \mathcal{M}} \mathrm{MAPE}_i^{-1}}
 $$
 
-
 ### References
 
 Giovanni Petris (2010). An R Package for Dynamic Linear Models. Journal of Statistical Software, 36(12), 1-16. URL <https://www.jstatsoft.org/v36/i12/>.
 
-Kristensen K (2024). RTMB: 'R' Bindings for 'TMB'. R package version 1.6, URL
-  <https://github.com/kaskr/RTMB>.
+Kristensen K (2024). RTMB: 'R' Bindings for 'TMB'. R package version 1.6, URL <https://github.com/kaskr/RTMB>.
 
 Petris, Petrone, and Campagnoli. Dynamic Linear Models with R. Springer (2009).
-
-
