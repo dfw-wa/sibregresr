@@ -172,15 +172,20 @@ pen_dlm_forecast$forecasts |> dplyr::filter(ReturnYear==max(ReturnYear),model_na
 
 The penalized complexity model puts penalties on the mean of the coefficients $\beta_t$ for each year $t$ and the standard deviation of the steps in the random walk. So if the coefficients are:  
 
-$$\beta_t = \beta_{t-1} + \omega_t \\ 
+$$
+\beta_t = \beta_{t-1} + \omega_t \\ 
 \omega_t \sim \mathcal{N}(0,\sigma)
 $$
 
 this model puts exponential-gamma penalties on both $\bar{\beta}$ and $\sigma$
 
-$$ \bar\beta, ~\sigma \sim \text{exp}(\lambda)\\
+
+$$
+\bar\beta, ~\sigma \sim \text{exp}(\lambda)\\
 \lambda \sim \text{Gamma}(\text{Shape}=10,~ \text{Scale}=1)
 $$
+
+
 Additionally, $0.05*\text{log}(\bar\beta,\sigma)$ for all$\bar\beta$s and $\sigma$s is added to the log-likelihood to keep their values from shrinking so small as to cause numerical problems during optimization.
 
 ### Non-sibling (e.g., climate) predictors
@@ -252,10 +257,10 @@ w_m=\frac{e^{-0.5\left(\mathrm{AIC}_m-\mathrm{AIC}_{\min }\right)}}{\sum_{i \in 
 $$
 
 
-or based on their observed performance $\mathrm{Perf}$ in previous years as measured by the reciprocal of mean absolute percent error (MAPE),  root mean square error (RMSE), or mean symmetric accuracy (MeanSA).
+or based on their observed performance in previous years as measured by the reciprocal of mean absolute percent error (MAPE),  root mean square error (RMSE), or mean symmetric accuracy (MeanSA). For example,
 
 $$
-?,
+w_m=\frac{\mathrm{MAPE}_m^{-1}}{\sum_{i \in \mathcal{M}} \mathrm{MAPE}_i^{-1}}
 $$
 
 
