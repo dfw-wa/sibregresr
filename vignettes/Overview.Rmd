@@ -1,10 +1,6 @@
 ---
 title: "Overview"
 output: rmarkdown::html_vignette
-  # html_document:
-  #   toc: true # table of content true
-  #   toc_depth: 3  # upto three depths of headings (specified by #, ## and ###)
-  #   theme: united  # many options for theme, this one is my favorite.
 vignette: >
   %\VignetteIndexEntry{Overview}
   %\VignetteEngine{knitr::rmarkdown}
@@ -185,7 +181,7 @@ this model puts exponential-gamma penalties on both $\bar{\beta}$ and $\sigma$
 $$ \bar\beta, ~\sigma \sim \text{exp}(\lambda)\\
 \lambda \sim \text{Gamma}(\text{Shape}=10,~ \text{Scale}=1)
 $$
-Additionally, $0.05*\text{log}(\sigma)$ for all $\sigma$s is added to the log-likelihood to keep their values from shrinking so small as to cause numerical problems during optimization.
+Additionally, $0.05*\text{log}(\bar\beta,\sigma)$ for all$\bar\beta$s and $\sigma$s is added to the log-likelihood to keep their values from shrinking so small as to cause numerical problems during optimization.
 
 ### Non-sibling (e.g., climate) predictors
 

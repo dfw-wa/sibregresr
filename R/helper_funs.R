@@ -90,6 +90,7 @@ get_npar <- function(build){
 #' @param y response data
 #' @param mod dlm model model object
 #' @param npar number of parameters
+#' @param mod_type either "dlm" if one of the 8 models fitted with `dlm` package or "RTMB" if the penalized dlm fit with the `RTMB` package.
 #'
 #' @return real, AICc
 #' @examples

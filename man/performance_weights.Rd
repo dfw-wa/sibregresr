@@ -2,7 +2,7 @@
 % Please edit documentation in R/performance_weights.R
 \name{performance_weights}
 \alias{performance_weights}
-\title{Calculated weighted average forecasts}
+\title{Calculates weighted average forecasts, performance metrics, and prediction intervals based on past performance}
 \usage{
 performance_weights(
   fits,
@@ -30,7 +30,7 @@ performance_weights(
 a data frame with predictions from component models and weighted average models based on AICc, MAPE, and RMSE weights.
 }
 \description{
-Calculated weighted average forecasts
+Prediction intervals are based on the standard deviation between one-year ahead predictions (i.e., forecasts) and observations in log space. The number of years included in the standard deviation calculations is the minimum of the number of years available or the values specified for \code{perf_yrs}. For example, if \code{perf_yrs = 15} but only three years of an ensemble forecast had been generated prior to a given year, those three years would be used to calculate the forecast standard deviation and prediction intervals, however, if 20 years of the ensemble forecast were available, only the most recent 15 years would be used. The "n_sd" field in the output of a call to \code{forecast_fun()} provides the number of years used to calculate prediction intervals for that forecast. The number of years used to calculate weights for an ensemble forecast is conducted in the same way (i.e., all available up to "wt_yrs") and the "n_wts" field in the output gives the number of years used. This is not relevant for ensembles based on AICc weighting as they are based on the AICc value for models fit for the current year.
 }
 \details{
 AICc weights are calculated as:

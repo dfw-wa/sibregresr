@@ -12,6 +12,8 @@ get_AIC(y, mod, npar, mod_type = "dlm")
 \item{mod}{dlm model model object}
 
 \item{npar}{number of parameters}
+
+\item{mod_type}{either "dlm" if one of the 8 models fitted with \code{dlm} package or "RTMB" if the penalized dlm fit with the \code{RTMB} package.}
 }
 \value{
 real, AICc

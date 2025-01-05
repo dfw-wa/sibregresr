@@ -6,7 +6,7 @@
 \usage{
 pen_dlm(
   dat,
-  form = formula("y~x"),
+  form = stats::formula("y~x"),
   regu = c(0.05, 0.05),
   gamma_shape = 10,
   gamma_scale = 1
@@ -27,5 +27,15 @@ pen_dlm(
 a list with two components: the fitted TMB model object, which has the NLL and the linear predictors in the report(), as well as the outfut from the call to TMBhelper::fit_tmb(), which is used to optimize the model.
 }
 \description{
-penalized DLM in RTMB
+function to fit a penalized dynamic linear regression model.
+
+The penalized complexity model puts penalties on the mean of the coefficients \eqn{\beta_t} for each year \eqn{t} and the standard deviation of the steps in the random walk. So if the coefficients are:
+
+\deqn{\beta_t = \beta_{t-1} + \omega_t \\ \omega_t \sim \mathcal{N}(0,\sigma)}
+
+this model puts exponential-gamma penalties on both \eqn{\bar{\beta}} and \eqn{\sigma}.
+
+\deqn{\bar{\beta},~\sigma \sim \text{exp}(\lambda) \\ \lambda \sim \text{Gamma}(\text{Shape}=10,~\text{Scale}=1)}
+
+Additionally, \eqn{0.05*\text{log}(\bar{\beta}, \sigma)} for all \eqn{\bar{\beta}}s and \eqn{\sigma}s is added to the log-likelihood to keep their values from shrinking so small as to cause numerical problems during optimization.
 }

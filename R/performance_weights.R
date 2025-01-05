@@ -1,4 +1,8 @@
-#' Calculated weighted average forecasts
+#' Calculates weighted average forecasts, performance metrics, and prediction intervals based on past performance
+#'
+#' @description
+#' Prediction intervals are based on the standard deviation between one-year ahead predictions (i.e., forecasts) and observations in log space. The number of years included in the standard deviation calculations is the minimum of the number of years available or the values specified for `perf_yrs`. For example, if `perf_yrs = 15` but only three years of an ensemble forecast had been generated prior to a given year, those three years would be used to calculate the forecast standard deviation and prediction intervals, however, if 20 years of the ensemble forecast were available, only the most recent 15 years would be used. The "n_sd" field in the output of a call to `forecast_fun()` provides the number of years used to calculate prediction intervals for that forecast. The number of years used to calculate weights for an ensemble forecast is conducted in the same way (i.e., all available up to "wt_yrs") and the "n_wts" field in the output gives the number of years used. This is not relevant for ensembles based on AICc weighting as they are based on the AICc value for models fit for the current year.
+#'
 #'
 #' @param fits data frame returned by `fit_mods` function
 #' @param perf_yrs maximum number of years of predictions to include in performance metrics. Set to infinity to use a stretching window.
@@ -159,8 +163,8 @@ performance_weights<-function(fits,
     )|>
     dplyr::arrange(model_name,Stock,Age,ReturnYear) |>
     dplyr::mutate(n_wts=ifelse(model_name%in%c("MAPE_weight" ,"MeanSA_weight", "RMSE_weight" ),n_wts,NA),
-                  L90=exp(log(Pred)+qnorm(.05,0,log_sd)),
-                  L50=exp(log(Pred)+qnorm(.25,0,log_sd)),
-                  U50=exp(log(Pred)+qnorm(.75,0,log_sd)),
-                  U90=exp(log(Pred)+qnorm(.95,0,log_sd)))
+                  L90=exp(log(Pred)+stats::qnorm(.05,0,log_sd)),
+                  L50=exp(log(Pred)+stats::qnorm(.25,0,log_sd)),
+                  U50=exp(log(Pred)+stats::qnorm(.75,0,log_sd)),
+                  U90=exp(log(Pred)+stats::qnorm(.95,0,log_sd)))
 }

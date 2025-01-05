@@ -17,14 +17,20 @@ BugReports: https://github.com/wdfw-fp/sibregresr/issues
 Imports: 
     dlm,
     dplyr,
+    flextable,
+    ggplot2,
     magrittr,
     purrr,
     readr,
     rlang,
+    RTMB,
+    scales,
+    stats,
     stringr,
     tibble,
     tidyr,
     tidyselect,
+    utils,
     zoo
 Depends: 
     R (>= 2.10)
