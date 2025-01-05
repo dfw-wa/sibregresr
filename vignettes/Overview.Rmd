@@ -1,6 +1,8 @@
 ---
 title: "Overview"
-output: rmarkdown::html_vignette
+output: rmarkdown::html_vignette:
+    self_contained: false
+mathjax: default  
 vignette: >
   %\VignetteIndexEntry{Overview}
   %\VignetteEngine{knitr::rmarkdown}
@@ -170,23 +172,24 @@ pen_dlm_forecast<-forecast_fun(
 pen_dlm_forecast$forecasts |> dplyr::filter(ReturnYear==max(ReturnYear),model_name=="PenDlm") |> dplyr::select(Stock,Pred,MAPE,RMSE,MPE,MEr) |> dplyr::arrange(Stock,Age,MAPE)|> dplyr::mutate(dplyr::across(where(is.numeric),round))
 ```
 
-The penalized complexity model puts penalties on the mean of the coefficients $\beta_t$ for each year $t$ and the standard deviation of the steps in the random walk. So if the coefficients are:  
+The penalized complexity model puts penalties on the mean of the coefficients $\beta_t$ for each year $t$ and the standard deviation of the steps in the random walk. So if the coefficients are:
 
 $$
-\beta_t = \beta_{t-1} + \omega_t \\ 
+\beta_t = \beta_{t-1} + \omega_t \\
 \omega_t \sim \mathcal{N}(0,\sigma)
 $$
 
-this model puts exponential-gamma penalties on both $\bar{\beta}$ and $\sigma$
-
+This model puts exponential-gamma penalties on all $\bar{\beta}$ and $\sigma$:
 
 $$
-\bar\beta, ~\sigma \sim \text{exp}(\lambda)\\
+\bar{\beta}, ~\sigma \sim \text{exp}(\lambda) \\
 \lambda \sim \text{Gamma}(\text{Shape}=10,~ \text{Scale}=1)
 $$
 
+where two unique $\lambda$ parameters are fit for every predictor in the model.  
 
-Additionally, $0.05*\text{log}(\bar\beta,\sigma)$ for all$\bar\beta$s and $\sigma$s is added to the log-likelihood to keep their values from shrinking so small as to cause numerical problems during optimization.
+Additionally, $0.05*\text{log}(\bar{\beta}, \sigma)$ for all $\bar{\beta}$s and $\sigma$s is added to the log-likelihood to keep their values from shrinking so small as to cause numerical problems during optimization.
+
 
 ### Non-sibling (e.g., climate) predictors
 
