@@ -107,10 +107,13 @@
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>Model options are:</p><ul><li><p>constLM –	Sibling regression with constant slope and intercept.</p></li>
+    <p>The models available in this package are variations of a sibling regression model with time-varying intercept and slope:
+$$\left\{\begin{aligned}\mathrm{log}(y_{a,t}) &amp; =\alpha_t + \mathrm{log}(y_{a-1,t-1}) \beta_t + v_t, &amp; \quad &amp;v_t \sim \mathcal{N}\left(0, V_t\right), \\\alpha_t &amp; = \alpha_{t-1} + w_{\alpha, t}, &amp; \quad &amp; w_{\alpha, t} \sim \mathcal{N}\left(0, W_{\alpha, t}\right), \\\beta_t &amp; = \beta_{t-1} + w_{\beta, t}, &amp; \quad &amp; w_{\beta, t} \sim \mathcal{N}\left(0, W_{\beta, t}\right),\end{aligned}\right.$$</p>
+<p>where \(\alpha_t\) and \(\beta_t\) are an intercept and a slope for returns of the previous age in the previous year, respectively, and both are allowed to vary across years as random walks with process error variances \(w_{\alpha, t}\) and \(w_{\beta, t}\) respectively. The residual \(v_t\) is assumed to be normally distributed around zero with variance \(V_t\). Together with a vague prior distribution for the values of \(\alpha_0\) and \(\beta_0\) (the slope and intercept prior to the first year) these equations define the "full" sibling regression models. However, this "full" model may be overly complex for optimal prediction, and is difficult to fit in practice. Simplified versions of this model are included, as described below.</p>
+<p>Model options are:</p><ul><li><p>constLM –	Sibling regression with constant slope and intercept.</p></li>
 <li><p>tvInt –	Sibling regression with  time-varying intercept.</p></li>
 <li><p>tvSlope –	Sibling regression with time-varying slope.</p></li>
-<li><p>tvIntSlope –	Sibling regression with time-varying slope and intercept. This model is not inlcuded by default because it generally converges to one of the simpler model. In other words, it is exceedingly rare for the data to support this complex of a model and this including it in an ensemble leads to double weighting one of the simpler models.</p></li>
+<li><p>tvIntSlope –	Sibling regression with time-varying slope and intercept (i.e., the "full" mode). This model is not included by default because it generally converges to one of the simpler model. In other words, it is exceedingly rare for the data to support this complex of a model and this including it in an ensemble leads to double weighting one of the simpler models.</p></li>
 <li><p>tvCRzeroInt –	Time varying "cohort ratio" model. Time varying slope, Intercept=0.</p></li>
 <li><p>constCRzeroInt –	Constant "cohort ratio" model. Constant slope, Intercept=0.</p></li>
 <li><p>tvIntOnly –	Time-varying Intercept-only model. Random walk on return, no sibling predictor.</p></li>
