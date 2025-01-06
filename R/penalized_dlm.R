@@ -11,15 +11,19 @@
 #' @param gamma_scale scale paramter for the gamma prior on the expential distributions rate paramters.
 #'
 #'@description
-#' The penalized complexity model puts penalties on the mean of the coefficients \eqn{\beta_t} for each year \eqn{t} and the standard deviation of the steps in the random walk. So if the coefficients are:
+#' The penalized complexity model puts penalties on the across-year means \eqn{\bar{\beta}} of each coefficient \eqn{\beta_t} for each year \eqn{t}, and the standard deviation of the steps in the random walk. So if the coefficients are:
 #'
 #' \deqn{\beta_t = \beta_{t-1} + \omega_t \\ \omega_t \sim \mathcal{N}(0,\sigma)}
 #'
-#' this model puts exponential-gamma penalties on both \eqn{\bar{\beta}} and \eqn{\sigma}.
+#' \deqn{\bar{\beta}\sim \mathcal{N}(0,\tau)}
 #'
-#' \deqn{\bar{\beta},~\sigma \sim \text{exp}(\lambda) \\ \lambda \sim \text{Gamma}(\text{Shape}=10,~\text{Scale}=1)}
+#' This model puts exponential-gamma penalties on all $\tau$ and $\sigma$ parameters, for which there is a unique parameter for each predictor in the model:
 #'
-#' Additionally, \eqn{0.05*\text{log}(\bar{\beta}, \sigma)} for all \eqn{\bar{\beta}}s and \eqn{\sigma}s is added to the log-likelihood to keep their values from shrinking so small as to cause numerical problems during optimization.
+#' \deqn{\tau,~\sigma \sim \text{exp}(\lambda) \\ \lambda \sim \text{Gamma}(\text{Shape}=10,~\text{Scale}=1)}
+#'
+#' where two unique \eqn{\lambda} parameters are fit for every predictor in the model.
+#'
+#' Additionally, \eqn{0.05*\text{log}(\tau, \sigma)} for all \eqn{\tau}s and \eqn{\sigma}s is added to the log-likelihood to keep their values from shrinking so small as to cause numerical problems during optimization.
 
 #' @return a list with two components: the fitted TMB model object, which has the NLL and the linear predictors in the report(), as well as the outfut from the call to TMBhelper::fit_tmb(), which is used to optimize the model.
 #' @export

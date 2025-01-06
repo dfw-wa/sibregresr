@@ -167,7 +167,7 @@ pen_dlm_forecast<-forecast_fun(
 pen_dlm_forecast$forecasts |> dplyr::filter(ReturnYear==max(ReturnYear),model_name=="PenDlm") |> dplyr::select(Stock,Pred,MAPE,RMSE,MPE,MEr) |> dplyr::arrange(Stock,Age,MAPE)|> dplyr::mutate(dplyr::across(where(is.numeric),round))
 ```
 
-The penalized complexity model puts penalties on the mean of the coefficients $\beta_t$ for each year $t$ and the standard deviation of the steps in the random walk. So if the coefficients are:
+The penalized complexity model puts penalties on the across-year means $\bar{\beta}$ of each coefficient $\beta_t$ for each year $t$, and the standard deviation of the steps in the random walk. So if the coefficients are:
 
 $$
 \begin{aligned}
@@ -176,18 +176,22 @@ $$
 \end{aligned}
 $$
 
-This model puts exponential-gamma penalties on all $\bar{\beta}$ and $\sigma$:
+$$
+\bar{\beta}\sim \mathcal{N}(0,\tau)
+$$
+
+This model puts exponential-gamma penalties on all $\tau$ and $\sigma$ parameters, for which there is a unique parameter for each predictor in the model:
 
 $$
 \begin{aligned}
-\bar{\beta}, ~\sigma &\sim \exp(\lambda) \\
+\sigma,~\tau &\sim \exp(\lambda) \\
 \lambda &\sim \text{Gamma}(\text{shape}=10,~ \text{scale}=1)
 \end{aligned}
 $$
 
 where two unique $\lambda$ parameters are fit for every predictor in the model.
 
-Additionally, $0.05*\text{log}(\bar{\beta}, \sigma)$ for all $\bar{\beta}$s and $\sigma$s is added to the log-likelihood to keep their values from shrinking so small as to cause numerical problems during optimization.
+Additionally, $0.05*\text{log}(\tau, \sigma)$ for all $\sigma$s and $\tau$s is added to the log-likelihood to keep their values from shrinking so small as to cause numerical problems during optimization.
 
 ### Non-sibling (e.g., climate) predictors
 
