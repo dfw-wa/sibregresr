@@ -244,10 +244,15 @@ $$
 
 where $\alpha_t$ and $\beta_t$ are an intercept and a slope for the log-transformed returns of the previous age in the previous year, respectively, and both are allowed to vary across years as random walks with process error variances $w_{\alpha, t}$ and $w_{\beta, t}$ respectively. The residual $v_t$ is assumed to be normally distributed around zero with variance $V_t$. Together with a vague prior distribution for the values of $\alpha_0$ and $\beta_0$ (the slope and intercept prior to the first year) these equations define the "full" sibling regression models. However, this "full" model may be overly complex for optimal prediction, and is difficult to fit in practice.
 
-Other models are simplified versions of the full model where: 1) the slope is assumed to constant through time (i.e., $w_{\beta, t}=0$); 2) the intercept is assumed to be constant through time; 3) the slope and intercept are assumed to be constant through time; 4) the intercept is assumed to be zero (i.e., $\alpha_t=0$);\
-5) the intercept is assumed to be zero and the slope is assumed to be constant through time;\
-6) the slope is assumed to be zero; and\
-7) the slope is assumed to be zero and the intercept is assumed to be constant through time.
+Other models are simplified versions of the full model where:
+
+1)  the slope is assumed to constant through time (i.e., $w_{\beta, t}=0$);\
+2)  the intercept is assumed to be constant through time;\
+3)  the slope and intercept are assumed to be constant through time;\
+4)  the intercept is assumed to be zero (i.e., $\alpha_t=0$);\
+5)  the intercept is assumed to be zero and the slope is assumed to be constant through time;\
+6)  the slope is assumed to be zero; and\
+7)  the slope is assumed to be zero and the intercept is assumed to be constant through time.
 
 These models are fit using the `dlm` package (Petris 2010) within this `sibregresr` package. The penalized version of the full DLM is fit using `RTMB` (Kristensen 2024).
 
