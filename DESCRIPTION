@@ -2,8 +2,9 @@ Package: sibregresr
 Title: Sibling Regression Salmon Forecasting
 Version: 0.0.0.9000
 Authors@R: c(
-    person("Ben", "Cox", , "Ben.Cox@dfw.wa.gov", role = c("aut"),
-           comment = c(ORCID = "0000-0001-5073-8052")),
+    person("Thomas", "Buehrens", , "Thomas.Buehrens@dfw.wa.gov", role = c("aut"),
+           comment = c(ORCID = "0000-0003-4017-6425")),
+    person("Ben", "Cox", , "Ben.Cox@dfw.wa.gov", role = c("aut")),
         person("Mark", "Sorel", , "mark.sorel@dfw.wa.gov", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0001-5073-8052"))
            )
