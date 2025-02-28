@@ -4,7 +4,7 @@
 \alias{make_plot}
 \title{plot observations and forecasts by age}
 \usage{
-make_plot(forecasts, mod_name)
+make_plot(forecasts, mod_name, include_50_CI = TRUE, include_90_CI = TRUE)
 }
 \arguments{
 \item{forecasts}{output of a call to \code{forecaste_fun}}

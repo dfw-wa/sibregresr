@@ -10,7 +10,8 @@ mod_funs(
   penDLM_formula = NULL,
   penDLM_regu = NULL,
   penDLM_gamma_shape = NULL,
-  penDLM_gamma_scale = NULL
+  penDLM_gamma_scale = NULL,
+  penDLM_exp_rate = NULL
 )
 }
 \arguments{

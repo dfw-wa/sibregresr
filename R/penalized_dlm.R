@@ -29,10 +29,13 @@
 #' @export
 #'
 pen_dlm<-function(dat,form=stats::formula("y~x"),
-                  regu=c(.05,.05),gamma_shape=10,gamma_scale=1){
+                  regu=c(.01,.01),gamma_shape=10,gamma_scale=1,exp_rate=c(1,1)){
 
 options(na.action = "na.pass")
 mod_mat<-stats::model.matrix(form,data=dat)
+
+missing_ind<-which(is.na(mod_mat))
+
 
 n_coefs<-ncol(mod_mat)
 
@@ -42,7 +45,9 @@ data<-list(
   y=utils::head(dat,-1)$y,
   mod_mat=mod_mat,
   n_coefs=n_coefs,
-  n_years=n_years
+  n_years=n_years,
+  exp_rate=exp_rate,
+  missing_ind=missing_ind
 )
 
 
@@ -50,8 +55,8 @@ data<-list(
 
 
 params<-list(
-
-log_exp_rate= (numeric(2)+2),
+  missing_cov=numeric(length(missing_ind))+.05,
+# log_exp_rate= (numeric(2)+2),
 
 coef_inits=numeric(n_coefs)+1,
 
@@ -74,30 +79,37 @@ f <- function(parms) {
 mean_sd<-exp(mean_log_sd)
 innov_sd<-exp(innov_log_sd)
 resid_sd<-exp(resid_log_sd)
-exp_rate<-exp(log_exp_rate)
+# exp_rate<-exp(log_exp_rate)
 #
 nll<-0
 #
-coefs<-matrix(0,n_years,n_coefs)
-coefs[1,]<-coef_inits
+coefs<-array(list(),c(n_years))
+coefs[[1]]<-coef_inits
 for(i in 2:n_years){
-  coefs[i,]<-coefs[i-1,]+coef_inovations[i-1,]
+  coefs[[i]]<-coefs[[i-1]]+coef_inovations[i-1,]
 }
 
+## convert to normal array
+coefs <- do.call("c",coefs)
+dim(coefs) <- c(n_coefs,n_years)
+coefs<-t(coefs)
+RTMB::REPORT(coefs)
 
 for ( i in 1:n_coefs){
   nll<- nll - sum(RTMB::dnorm(coef_inovations[,i],0,innov_sd[i],log=TRUE)) # penalize year-to-year variations
 }
 
-coef_means<-(RTMB::apply(coefs,2,mean))
+coef_means<-(RTMB::apply((coefs),2,mean))
 nll<-nll - sum(RTMB::dnorm(coef_means,0,mean_sd,log=TRUE)) #penalize mean of coefficients across years
 
 
 
-nll<-nll - sum(RTMB::dexp(mean_sd,exp_rate[1],log=TRUE))- sum(regu[1]*mean_log_sd)
-nll<-nll - sum(RTMB::dexp(innov_sd,exp_rate[2],log=TRUE))- sum (regu[2]*innov_log_sd)
+nll<-nll - sum(RTMB::dexp(mean_sd, exp_rate[1],log=TRUE))- sum(regu[1]*mean_log_sd)
+nll<-nll - sum(RTMB::dexp(innov_sd, exp_rate[2],log=TRUE))- sum (regu[2]*innov_log_sd)
 
-nll<-nll - sum(RTMB::dgamma(x=exp_rate,shape=gamma_shape,scale=gamma_scale,log=TRUE))
+# nll<-nll - sum(RTMB::dgamma(x=exp_rate,shape=gamma_shape,scale=gamma_scale,log=TRUE))
+mod_mat[missing_ind]<-missing_cov
+nll<- nll-sum(RTMB::dnorm(missing_cov,0,1,log=TRUE))
 
 pred<-RTMB::apply(coefs*mod_mat,1,sum)
 
@@ -108,7 +120,7 @@ nll
 }
 
 
-obj <- RTMB::MakeADFun(f, params,random=c("coef_inovations","coef_inits"),silent =TRUE)
+obj <- RTMB::MakeADFun(f, params,random=c("coef_inovations","coef_inits","missing_cov"),silent =TRUE)
 
 
 #optimize
@@ -117,29 +129,29 @@ parameter_estimates = stats::nlminb(
   start = obj$par,
   objective = obj$fn,
   gradient = obj$gr,
-  control =  list(eval.max = 1e4,
-                  iter.max = 1e4,
+  control =  list(eval.max = 1e3,
+                  iter.max = 1e3,
                   trace = 0)
 )
 
 
 # Re-run to further decrease final gradient
-parameter_estimates = stats::nlminb(
-  start = parameter_estimates$par,
-  objective = obj$fn,
-  gradient = obj$gr,
-  control =  list(eval.max = 1e4,
-                  iter.max = 1e4,
-                  trace = 0)
-)
+# parameter_estimates = stats::nlminb(
+#   start = parameter_estimates$par,
+#   objective = obj$fn,
+#   gradient = obj$gr,
+#   control =  list(eval.max = 1e4,
+#                   iter.max = 1e4,
+#                   trace = 0)
+# )
 
 ## Run some Newton steps
-for (i in 1:2) {
-  g = as.numeric(obj$gr(parameter_estimates$par))
-  h = stats::optimHess(parameter_estimates$par, fn = obj$fn, gr = obj$gr)
-  parameter_estimates$par = parameter_estimates$par - solve(h, g)
-  parameter_estimates$objective = obj$fn(parameter_estimates$par)
-}
+# for (i in 1:2) {
+#   g = as.numeric(obj$gr(parameter_estimates$par))
+#   h = stats::optimHess(parameter_estimates$par, fn = obj$fn, gr = obj$gr)
+#   parameter_estimates$par = parameter_estimates$par - solve(h, g)
+#   parameter_estimates$objective = obj$fn(parameter_estimates$par)
+# }
 
 
 return(list(

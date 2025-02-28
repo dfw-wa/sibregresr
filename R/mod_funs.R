@@ -43,7 +43,8 @@ mod_funs<-function(include=c(
 penDLM_formula=NULL,
 penDLM_regu=NULL,
 penDLM_gamma_shape=NULL,
-penDLM_gamma_scale=NULL){
+penDLM_gamma_scale=NULL,
+penDLM_exp_rate=NULL){
 
 #   # Constant Intercept-only model
 constIntOnly <- function(parm,x.mat){
@@ -112,7 +113,11 @@ if(!is.null(penDLM_gamma_scale)){
   formals(pen_dlm_out)$gamma_scale<-penDLM_gamma_scale
 }
 
+if(!is.null(penDLM_exp_rate)){
+  formals(pen_dlm_out)$exp_rate<-penDLM_exp_rate
+}
 
+penDLM_exp_rate
 all_funs<-list(
   "constIntOnly" = constIntOnly,
   "tvIntOnly" = tvIntOnly,

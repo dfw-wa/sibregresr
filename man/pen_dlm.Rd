@@ -7,9 +7,10 @@
 pen_dlm(
   dat,
   form = stats::formula("y~x"),
-  regu = c(0.05, 0.05),
+  regu = c(0.01, 0.01),
   gamma_shape = 10,
-  gamma_scale = 1
+  gamma_scale = 1,
+  exp_rate = c(1, 1)
 )
 }
 \arguments{

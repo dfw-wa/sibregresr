@@ -24,11 +24,15 @@ fit_mods<-function(dat,transformation=log,scale_x=FALSE,scale_y=FALSE,
     warning("It is highly recomended to scale the response and predictors when fitting the penalized DLM.")
   }
 
+  min_age<-  min(dat$Age)
+
+
   fits<-  dat |>
     mutate(
       xy_og=purrr::map2(data,Age, ~.x |>
                           dplyr::select(BroodYear, y=paste0("Age",.y), x=paste0("Age", .y-1)) |>
-                          dplyr::filter(!is.na(x)) |>
+                          # dplyr::filter(!(is.na(y)&BroodYear!=(max(BroodYear)-(.y-min_age+1)))) |>
+                          dplyr::filter(BroodYear<=(max(BroodYear)-(.y-min_age))) |>
                           dplyr::mutate(ReturnYear=BroodYear+.y) |>
                           dplyr::left_join(covariates,by=cov_join_col) |>
                           dplyr::mutate(across(-c(ReturnYear,BroodYear,x,y),scale))),

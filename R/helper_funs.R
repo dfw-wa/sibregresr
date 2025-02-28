@@ -18,10 +18,11 @@ return_to_brood <- function(rt,by_stock=TRUE){
       tidyr::pivot_longer(tidyselect::contains("Age"), names_to = "AgeName", values_to = "Return") |>
       dplyr::mutate(Age=readr::parse_number(AgeName)) |>
       dplyr::mutate(BroodYear=ReturnYear - Age) |>
+      dplyr::filter(BroodYear>=min(ReturnYear)-min(Age)) |>
       dplyr::select(-ReturnYear, -Age) |>
       tidyr::pivot_wider(names_from =AgeName, values_from = Return) |>
       # Unquo the min_age thing
-      dplyr::filter(!is.na(!!min_age)) |>
+      # dplyr::filter(!is.na(!!min_age)) |>
       dplyr::ungroup() |>
       as.data.frame() |>
       dplyr::arrange(Stock,BroodYear)}
@@ -30,10 +31,11 @@ return_to_brood <- function(rt,by_stock=TRUE){
       tidyr::pivot_longer(tidyselect::contains("Age"), names_to = "AgeName", values_to = "Return") |>
       dplyr::mutate(Age=readr::parse_number(AgeName)) |>
       dplyr::mutate(BroodYear=ReturnYear - Age) |>
+      dplyr::filter(BroodYear>=min(ReturnYear)-min(Age)) |>
       dplyr::select(-ReturnYear, -Age) |>
       tidyr::pivot_wider(names_from =AgeName, values_from = Return) |>
       # Unquo the min_age thing
-      dplyr::filter(!is.na(!!min_age)) |>
+      # dplyr::filter(!is.na(!!min_age)) |>
       dplyr::ungroup() |>
       as.data.frame() |>
       dplyr::arrange(BroodYear)
@@ -58,7 +60,8 @@ brood_to_return <- function(bt){
     dplyr::arrange(AgeNames) |>
     dplyr::mutate(Age=readr::parse_number(AgeNames),
                   ReturnYear=BroodYear+Age) |>
-    dplyr::filter(!is.na(Return)) |>
+    dplyr::filter(ReturnYear <=(max(BroodYear)+min(Age))) |>
+    # dplyr::filter(!is.na(Return)) |>
     dplyr::select(Stock, ReturnYear, AgeNames, Return) |>
     tidyr::pivot_wider(names_from=AgeNames, values_from=Return)
 }

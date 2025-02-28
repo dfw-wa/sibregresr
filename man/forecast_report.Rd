@@ -32,7 +32,7 @@ forecast_report(
 
 \item{forecast_year}{the year to report forecast for}
 
-\item{df}{Input data. Either a return table or a brood table. Column names: Stock, ReturnYear (or BroodYear), and for each age (e.g., Age3). Must be in that format.}
+\item{df}{Input data. A return table oColumn names: Stock, ReturnYear, and abundance for each age (e.g., Age3). Must be in that format.}
 
 \item{include}{vector of names of models to include. Default is all options}
 

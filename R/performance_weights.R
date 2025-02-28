@@ -60,21 +60,21 @@ performance_weights<-function(fits,
   # Get the predictions, calculate error metrics
   preds_perf <- fits %>%
     dplyr::filter(purrr::map_lgl(error,is.null)) %>%
-    mutate(build=ifelse(model_name=="PenDlm",NA,purrr::pmap(tibble::lst(estimates, model, xy_dat), ~with(list(...), model(parm=estimates$par, x.mat=cbind(xy_dat$x))))),
-           filter=ifelse(model_name=="PenDlm",NA,purrr::map2(xy_dat, build, ~dlm::dlmFilter((.x$y), .y))),
-           npar=ifelse(model_name=="PenDlm",
-                       (purrr::map_dbl(estimates, \(x)(length(x$obj$par)-1)))
-                       ,(purrr::map_dbl(build, get_npar))),
-           AICc=ifelse(model_name=="PenDlm",
+    mutate(build=purrr::pmap(tibble::lst(estimates, model, xy_dat,model_name), ~with(list(...), if(model_name=="PenDlm"){NA}else{model(parm=estimates$par, x.mat=cbind(xy_dat$x))})),
+           filter=purrr::map2(xy_dat, build, ~if(is.na(.y[1])){NA}else{dlm::dlmFilter((.x$y), .y)}),
+           npar=purrr::pmap_dbl(tibble::lst(estimates, build,model_name), ~with(list(...),
+             if(model_name=="PenDlm"){
+                       (length(estimates$obj$par)-1)}else{
+                         get_npar(build)})),
 
-                       purrr::pmap_dbl(tibble::lst(dat=xy_dat,estimates, npar), ~with(list(...), get_AIC(dat$y, estimates, npar,mod_type="TMB"))),
+           AICc=purrr::pmap_dbl(tibble::lst(dat=xy_dat,estimates,build, npar,model_name), ~with(list(...), if(model_name=="PenDlm"){                                                                  get_AIC(dat$y, estimates, npar,mod_type="TMB")}else{
+             get_AIC(dat$y, build, npar)})),
 
-                       purrr::pmap_dbl(tibble::lst(dat=xy_dat,model=build, npar), ~with(list(...), get_AIC(dat$y, model, npar)))),
-           pred=
-             ifelse(model_name=="PenDlm",
-             purrr::map_dbl(estimates,\(x){if(is.null(x)){0}else{(tail(x$obj$report()$pred,1))}}),
 
-             purrr::map_dbl(filter, ~((.x$f[length(.x$f)])))),
+           pred=purrr::pmap_dbl(tibble::lst(filter,estimates,model_name), ~with(list(...), if(model_name=="PenDlm"){ (tail(estimates$obj$report()$pred,1))}else{
+             (filter$f[length(filter$f)])
+           })),
+
            pred=if(scale_y){((pred*response_sd)+response_mu)}else{pred},
            pred=inverse_transformation(pred),
 
@@ -137,7 +137,7 @@ performance_weights<-function(fits,
      bind_rows(
        df,
        (dplyr::group_by(df,Stock,ReturnYear,model_name) |>
-          dplyr::summarize(dplyr::across(c(Obs,Pred,Age,n_wts),sum)))
+          dplyr::summarize(dplyr::across(c(Obs,Pred,Age,n_wts),sum))) |> mutate(Age=Age+100)
      ))() |>
     #calculate error metrics
     dplyr::mutate(

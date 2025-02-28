@@ -7,7 +7,7 @@
 setup_data(df, mod_list = mod_funs(), n_forecasts = 20)
 }
 \arguments{
-\item{df}{Input data. Either a return table or a brood table. Column names: Stock, ReturnYear (or BroodYear), and for each age (e.g., Age3). Must be in that format.}
+\item{df}{Input data. A return table oColumn names: Stock, ReturnYear, and abundance for each age (e.g., Age3). Must be in that format.}
 
 \item{mod_list}{list of model functions as returned from \code{mod_funs} function call}
 
