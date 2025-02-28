@@ -66,9 +66,10 @@ Additionally, \(0.05*\text{log}(\tau, \sigma)\) for all \(\tau\)s and \(\sigma\)
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">pen_dlm</span><span class="op">(</span></span>
 <span>  <span class="va">dat</span>,</span>
 <span>  form <span class="op">=</span> <span class="fu">stats</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/stats/formula.html" class="external-link">formula</a></span><span class="op">(</span><span class="st">"y~x"</span><span class="op">)</span>,</span>
-<span>  regu <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.05</span>, <span class="fl">0.05</span><span class="op">)</span>,</span>
+<span>  regu <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.01</span>, <span class="fl">0.01</span><span class="op">)</span>,</span>
 <span>  gamma_shape <span class="op">=</span> <span class="fl">10</span>,</span>
-<span>  gamma_scale <span class="op">=</span> <span class="fl">1</span></span>
+<span>  gamma_scale <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  exp_rate <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
