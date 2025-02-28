@@ -26,7 +26,7 @@ This package is meant to forecast salmon returns using sibling regression. The c
 
 ## Installation
 
-You can install the development (the only) version of sibregresr from [GitHub](https://github.com/) with:
+You can install the development (the only) version of sibregresr from [GitHub](https://github.com/wdfw-fp/sibregresr) with:
 
 ```{r eval=FALSE}
 install.packages("devtools")
