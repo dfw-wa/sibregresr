@@ -94,7 +94,7 @@
 
 
 <dt id="arg-covariates">covariates<a class="anchor" aria-label="anchor" href="#arg-covariates"></a></dt>
-<dd><p>data frame of covariates to add to data. must contain "ReturnYear" field, which is used to perform the join with the salmon return data.</p></dd>
+<dd><p>data frame of covariates to add to data. must contain "ReturnYear" or "BroodYear" field, which is used to perform the join with the salmon return data. Missing values in covariates are ok, and are fit as random effects with normal(0,1) hyperdistribution. Therefore it is importand to scale covariates especially if there are missing values.</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
