@@ -203,6 +203,8 @@ covariates_24 |> head(5)
 
 ```
 
+The model handles missing covariate values by fitting them as random effects with a $\mathcal{N}(0,1)$ prior.  
+
 The formula for the model is provided to the `mod_funs()` function and the covariate data to the `fit_mods()` function, but both can be passed through the `forecast_fun()` function as well. When specifying the formula, "x" is used to represent the sibling predictor. So the formula specified below would include the sibling predictor as well as PDO and NPGO from two years prior to when the fish return. In theory, the penalized complexity priors will shrink the coefficients on colinear predictors, so it is ok to include them.
 
 ```{r}

@@ -22,7 +22,8 @@ Useful links:
 
 Authors:
 \itemize{
-  \item Ben Cox \email{Ben.Cox@dfw.wa.gov} (\href{https://orcid.org/0000-0001-5073-8052}{ORCID})
+  \item Thomas Buehrens \email{Thomas.Buehrens@dfw.wa.gov} (\href{https://orcid.org/0000-0003-4017-6425}{ORCID})
+  \item Ben Cox \email{Ben.Cox@dfw.wa.gov}
 }
 
 }

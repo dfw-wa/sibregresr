@@ -4,7 +4,7 @@
 #' @param transformation transformation to be conducted on a response and predictors. default is log
 #' @param scale_x boolean whether to scale the predictor data prior to fitting
 #' @param scale_y boolean whether to scale the response data prior to fitting
-#' @param covariates data frame of covariates to add to data. must contain "ReturnYear" field, which is used to perform the join with the salmon return data.
+#' @param covariates data frame of covariates to add to data. must contain "ReturnYear" or "BroodYear" field, which is used to perform the join with the salmon return data. Missing values in covariates are ok, and are fit as random effects with normal(0,1) hyperdistribution. Therefore it is importand to scale covariates especially if there are missing values.
 
 #'
 #'@details

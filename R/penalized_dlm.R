@@ -116,6 +116,7 @@ pred<-RTMB::apply(coefs*mod_mat,1,sum)
 nll<- nll-sum(RTMB::dnorm((y),(utils::head(pred,-1)),resid_sd,log=TRUE))
 RTMB::REPORT(pred)
 RTMB::REPORT(nll)
+
 nll
 }
 
