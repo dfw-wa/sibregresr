@@ -16,7 +16,7 @@ setup_data<-function(df,
 
   min_yrs_stck<-df |> dplyr::group_by(Stock) |> dplyr::summarise(n=dplyr::n()) |> dplyr::filter(n==min(n)) |> dplyr::pull(n)
 
-  if(n_forecasts>(min_yrs_stck-5)){
+  if(any(n_forecasts>(min_yrs_stck-5))){
     warning("n_forecasts is greater the number of years of observation minus 5 for at last one stocks")
   }
 
