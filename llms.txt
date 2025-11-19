@@ -1,0 +1,118 @@
+# sibregresr
+
+This package is for forecasting salmon returns using sibling regression.
+The core functions produce model average predictions (i.e., ensembles)
+of dynamic linear models (DLMs) with sibling predictors. The package
+also has functionality to forecast using DLMs with penalized-complexity
+priors, which can be an alternative to model averaging.
+
+See the *Overview* article for more details and information on package
+functionality.
+
+## Installation
+
+You can install sibregresr from [GitHub](https://github.com/) with:
+
+``` r
+# install.packages("devtools")
+devtools::install_github("wdfw-fp/sibregresr")
+```
+
+## Example
+
+Below is an example of fitting an ensemble of 7 variations on a sibling
+regression DLM and evaluating performance over 15 years. A beta version
+plotting and table function are called to view the ensemble forecasts
+with weights based on mean absolute percent errors.
+
+See the *Overview* article for more details and examples.
+
+``` r
+library(sibregresr)
+
+forecast<-forecast_fun(
+  df = summer_chinook_2024,
+  include = c("constIntOnly", "tvIntOnly", "tvSlope", "constLM",
+    "tvCRzeroInt", "constCRzeroInt", "tvInt"),
+  transformation = log,
+  inverse_transformation = exp,
+  scale_x = FALSE,
+  scale_y = FALSE,
+  perf_yrs = 15,
+  wt_yrs = NULL,
+)
+#> [1] "Time for model fitting was 15.5 secs"
+
+make_table(forecast$forecasts,"MAPE_weight")
+```
+
+![](reference/figures/README-example-1.png)
+
+``` r
+
+make_plot(forecast$forecasts,"MAPE_weight")
+```
+
+![](reference/figures/README-example-3.png)
+
+``` R
+Copyright 2025 Mark Sorel, Ben Cox, Thomas Buehrens
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use the files in this repository except in compliance with the License.
+You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+```
+
+# Package index
+
+## All functions
+
+- [`brood_to_return()`](https://wdfw-fp.github.io/sibregresr/reference/brood_to_return.md)
+  : Convert a brood table to a return table
+- [`covariates_24`](https://wdfw-fp.github.io/sibregresr/reference/covariates_24.md)
+  : Table of predictors
+- [`fit_mods()`](https://wdfw-fp.github.io/sibregresr/reference/fit_mods.md)
+  : Prep data for each Stock/Age/n_years and fit the models
+- [`forecast_fun()`](https://wdfw-fp.github.io/sibregresr/reference/forecast_fun.md)
+  : generate forecasts
+- [`forecast_report()`](https://wdfw-fp.github.io/sibregresr/reference/forecast_report.md)
+  : Render a report of forecast results
+- [`get_AIC()`](https://wdfw-fp.github.io/sibregresr/reference/get_AIC.md)
+  : Calculate AICc for a dlm model object given the data and npar
+- [`get_npar()`](https://wdfw-fp.github.io/sibregresr/reference/get_npar.md)
+  : Get number of estimated parameters from a built dlm model object
+- [`make_plot()`](https://wdfw-fp.github.io/sibregresr/reference/make_plot.md)
+  : plot observations and forecasts by age
+- [`make_table()`](https://wdfw-fp.github.io/sibregresr/reference/make_table.md)
+  : Make results table
+- [`mod_funs()`](https://wdfw-fp.github.io/sibregresr/reference/mod_funs.md)
+  : functions to build models
+- [`pen_dlm()`](https://wdfw-fp.github.io/sibregresr/reference/pen_dlm.md)
+  : penalized DLM in RTMB
+- [`performance_weights()`](https://wdfw-fp.github.io/sibregresr/reference/performance_weights.md)
+  : Calculates weighted average forecasts, performance metrics, and
+  prediction intervals based on past performance
+- [`return_to_brood()`](https://wdfw-fp.github.io/sibregresr/reference/return_to_brood.md)
+  : Convert a Return Table to a Brood Table
+- [`setup_data()`](https://wdfw-fp.github.io/sibregresr/reference/setup_data.md)
+  : Setup data
+- [`stretching_mean()`](https://wdfw-fp.github.io/sibregresr/reference/stretching_mean.md)
+  : Stretching mean
+- [`stretching_samp_sd()`](https://wdfw-fp.github.io/sibregresr/reference/stretching_samp_sd.md)
+  : Stretching sample SD
+- [`summer_chinook_2024`](https://wdfw-fp.github.io/sibregresr/reference/summer_chinook_2024.md)
+  : Summer chinook returns through 2024
+
+# Articles
+
+### All vignettes
+
+- [Overview](https://wdfw-fp.github.io/sibregresr/articles/Overview.md):
