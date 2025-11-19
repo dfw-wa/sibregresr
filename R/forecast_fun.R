@@ -53,7 +53,7 @@ covariates = tibble(ReturnYear=numeric(0)),
   min_yrs_stck<-df2 |> dplyr::group_by(Stock) |> dplyr::summarise(n=dplyr::n()) |> dplyr::filter(n==min(n)) |> dplyr::pull(n)
 
 
-  if( (wt_yrs2+perf_yrs)>(min_yrs_stck-5)){
+  if( any((wt_yrs2+perf_yrs)>(min_yrs_stck-5))){
     warning(paste("wt_yrs + perf_yrs is greater the number of years of observation minus 5 for at least one stock." ))
   }
 
