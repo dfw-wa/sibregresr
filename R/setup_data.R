@@ -10,7 +10,8 @@
 #' @export
 setup_data<-function(df,
                      mod_list=mod_funs(),
-                     n_forecasts=20
+                     n_forecasts=20,
+                     include_youngest = FALSE
                     ){
 
 
@@ -26,9 +27,20 @@ setup_data<-function(df,
   #   df2<-df
   # }
 
+  # the ages for which you want forecasts
+  mod_ages<-sort(as.numeric(substr(colnames(df)[grepl("Age",colnames(df))],4,4)))
+
+  if(!include_youngest){
+    mod_ages <- mod_ages[-1]
+  }else{
+    new_col<-paste0("Age",(mod_ages[1]-1))
+
+    df<-df |>
+      dplyr::mutate({{new_col}}:= 1)
+  }
 
 
-  df |>
+ out<- df |>
     group_by(Stock) |>
     (\(dat)
     bind_rows(dat,
@@ -45,8 +57,49 @@ setup_data<-function(df,
     crossing(tibble(model_name=names(mod_list),
                     model=mod_list),
              # the ages for which you want forecasts
-             Age=sort(as.numeric(substr(colnames(df)[grepl("Age",colnames(df))],4,4)))[-1]) |>
+             Age=mod_ages) |>
     mutate(Actual=purrr::map2_dbl(Actual,Age,~.x |> pull(paste0("Age",.y)))) |>
     dplyr::arrange(Stock,Age,n_years) #if you have n_years.
 
+  if(include_youngest){
+    out <- out |>
+      dplyr::filter(
+        Age > min(mod_ages) |
+          model_name %in% c("tvIntOnly","constIntOnly","PenDlm")
+      ) |>
+      dplyr::mutate(
+        model = purrr::map2(
+          model,
+          model_name == "PenDlm" & Age == min(mod_ages),
+          ~ if (.y) modify_formula_if_needed(.x) else .x
+        )
+      )
+
+  }
+
+out
 }
+
+
+
+
+
+# function to modity formals
+modify_formula_if_needed <- function(f) {
+
+  fmls <- formals(f)
+
+  if (!"form" %in% names(fmls))
+    return(f)
+
+  current_formula <- as.formula(fmls$form)
+
+  updated_formula <- update(current_formula, . ~ . - x)
+
+    fmls$form <- updated_formula
+    formals(f) <- fmls
+
+
+  f
+}
+

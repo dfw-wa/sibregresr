@@ -32,6 +32,7 @@ scale_y = FALSE,
 perf_yrs = 15,
 wt_yrs = NULL,
 covariates = tibble(ReturnYear=numeric(0)),
+include_youngest=FALSE,
 ...
 ){
   start_time<-Sys.time()
@@ -67,7 +68,7 @@ covariates = tibble(ReturnYear=numeric(0)),
 
 
   mod_list<-mod_funs(include,...)
-  setup<-setup_data(df2,mod_list,n_forecasts = num_forecasts)
+  setup<-setup_data(df2,mod_list,n_forecasts = num_forecasts,include_youngest)
   fits<-fit_mods(setup,transformation,scale_x,scale_y,covariates)
   ensembles<-performance_weights(fits,
                                  perf_yrs,
@@ -91,3 +92,5 @@ elapsed<-Sys.time()-start_time
   list(fits=fits,
        forecasts=ensembles)
 }
+
+

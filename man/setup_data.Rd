@@ -4,7 +4,12 @@
 \alias{setup_data}
 \title{Setup data}
 \usage{
-setup_data(df, mod_list = mod_funs(), n_forecasts = 20)
+setup_data(
+  df,
+  mod_list = mod_funs(),
+  n_forecasts = 20,
+  include_youngest = FALSE
+)
 }
 \arguments{
 \item{df}{Input data. A return table oColumn names: Stock, ReturnYear, and abundance for each age (e.g., Age3). Must be in that format.}

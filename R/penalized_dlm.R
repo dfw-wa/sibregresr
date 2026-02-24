@@ -28,8 +28,10 @@
 #' @return a list with two components: the fitted TMB model object, which has the NLL and the linear predictors in the report(), as well as the outfut from the call to TMBhelper::fit_tmb(), which is used to optimize the model.
 #' @export
 #'
-pen_dlm<-function(dat,form=stats::formula("y~x"),
+pen_dlm<-function(dat,form=y~x,
                   regu=c(.01,.01),gamma_shape=10,gamma_scale=1,exp_rate=c(1,1)){
+
+
 
 options(na.action = "na.pass")
 mod_mat<-stats::model.matrix(form,data=dat)
