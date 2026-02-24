@@ -31,7 +31,7 @@ shrinking so small as to cause numerical problems during optimization.
 ``` r
 pen_dlm(
   dat,
-  form = stats::formula("y~x"),
+  form = y ~ x,
   regu = c(0.01, 0.01),
   gamma_shape = 10,
   gamma_scale = 1,

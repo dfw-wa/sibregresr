@@ -16,6 +16,7 @@ forecast_fun(
   perf_yrs = 15,
   wt_yrs = NULL,
   covariates = tibble(ReturnYear = numeric(0)),
+  include_youngest = FALSE,
   ...
 )
 ```

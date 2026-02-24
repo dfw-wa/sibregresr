@@ -83,7 +83,7 @@ forecast<-forecast_fun(
   perf_yrs = 15,
   wt_yrs = NULL,
 )
-#> [1] "Time for model fitting was 17.2 secs"
+#> [1] "Time for model fitting was 16.7 secs"
 ```
 
 The arguments in the above call are set to the defaults, which includes
@@ -387,7 +387,7 @@ pen_dlm_forecast_cov<-forecast_fun(
   covariates = covariates_24,
   penDLM_formula =formula("y~ x + lag2_PDO + lag2_NPGO")
 )
-#> [1] "Time for model fitting was 9.5 secs"
+#> [1] "Time for model fitting was 9.8 secs"
 
 pen_dlm_forecast_cov$forecasts |> dplyr::filter(ReturnYear==max(ReturnYear),model_name=="PenDlm") |>
   dplyr::mutate(model_name="PenDlm_cov") |> 

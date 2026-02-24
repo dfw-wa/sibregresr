@@ -6,7 +6,12 @@ of years excluded) in each row, for fitting
 ## Usage
 
 ``` r
-setup_data(df, mod_list = mod_funs(), n_forecasts = 20)
+setup_data(
+  df,
+  mod_list = mod_funs(),
+  n_forecasts = 20,
+  include_youngest = FALSE
+)
 ```
 
 ## Arguments
