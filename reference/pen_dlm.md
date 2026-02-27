@@ -70,6 +70,6 @@ pen_dlm(
 ## Value
 
 a list with two components: the fitted TMB model object, which has the
-NLL and the linear predictors in the report(), as well as the outfut
+NLL and the linear predictors in the report(), as well as the output
 from the call to TMBhelper::fit_tmb(), which is used to optimize the
 model.
