@@ -68,6 +68,7 @@ include_youngest=FALSE,
 
 
   mod_list<-mod_funs(include,...)
+  mod_list<-mod_funs(include)
   setup<-setup_data(df2,mod_list,n_forecasts = num_forecasts,include_youngest)
   fits<-fit_mods(setup,transformation,scale_x,scale_y,covariates)
   ensembles<-performance_weights(fits,

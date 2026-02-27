@@ -12,7 +12,7 @@ setup_data<-function(df,
                      mod_list=mod_funs(),
                      n_forecasts=20,
                      include_youngest = FALSE
-                    ){
+){
 
 
   min_yrs_stck<-df |> dplyr::group_by(Stock) |> dplyr::summarise(n=dplyr::n()) |> dplyr::filter(n==min(n)) |> dplyr::pull(n)
@@ -40,13 +40,13 @@ setup_data<-function(df,
   }
 
 
- out<- df |>
+  out<- df |>
     group_by(Stock) |>
     (\(dat)
-    bind_rows(dat,
-              dplyr::filter(dat,ReturnYear==max(ReturnYear)) |>
-                mutate(ReturnYear=ReturnYear+1) |>
-                mutate(across(contains("Age"),\(x)x=NA)))
+     bind_rows(dat,
+               dplyr::filter(dat,ReturnYear==max(ReturnYear)) |>
+                 mutate(ReturnYear=ReturnYear+1) |>
+                 mutate(across(contains("Age"),\(x)x=NA)))
     )()|>
     # left_join(covariates,by="ReturnYear") |>
     tidyr::nest() %>% dplyr::mutate(n=dim(data[[1]])[1]) |>
@@ -65,7 +65,7 @@ setup_data<-function(df,
     out <- out |>
       dplyr::filter(
         Age > min(mod_ages) |
-          model_name %in% c("tvIntOnly","constIntOnly","PenDlm")
+          model_name %in% c("tvIntOnly","constIntOnly","PenDlm","r2d2DLM")
       ) |>
       dplyr::mutate(
         model = purrr::map2(
@@ -74,10 +74,9 @@ setup_data<-function(df,
           ~ if (.y) modify_formula_if_needed(.x) else .x
         )
       )
-
   }
 
-out
+  out
 }
 
 
@@ -96,8 +95,8 @@ modify_formula_if_needed <- function(f) {
 
   updated_formula <- update(current_formula, . ~ . - x)
 
-    fmls$form <- updated_formula
-    formals(f) <- fmls
+  fmls$form <- updated_formula
+  formals(f) <- fmls
 
 
   f

@@ -63,7 +63,7 @@ fit_mods<-function(dat,transformation=log,scale_x=FALSE,scale_y=FALSE,
       # Debug=FALSE runs the optimization in C++ so its faster.
       MLE=purrr::pmap(list(dat=xy_dat,fun=model,names=model_name),
                       purrr::safely(\(dat,fun,names){
-                        if(names=="PenDlm"){
+                        if(names%in%c("r2d2DLM","PenDlm")){
                           fun(dat)
                         }else{
                             dlm::dlmMLE(y=dat$y, x.mat=cbind(dat$x),parm=rep(0,3),build=fun,hessian=FALSE,debug=FALSE)

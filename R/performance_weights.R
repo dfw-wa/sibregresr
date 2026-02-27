@@ -60,20 +60,23 @@ performance_weights<-function(fits,
   # Get the predictions, calculate error metrics
   preds_perf <- fits %>%
     dplyr::filter(purrr::map_lgl(error,is.null)) %>%
-    mutate(build=purrr::pmap(tibble::lst(estimates, model, xy_dat,model_name), ~with(list(...), if(model_name=="PenDlm"){NA}else{model(parm=estimates$par, x.mat=cbind(xy_dat$x))})),
+    mutate(build=purrr::pmap(tibble::lst(estimates, model, xy_dat,model_name), ~with(list(...), if(model_name%in%c("r2d2DLM","PenDlm")){NA}else{model(parm=estimates$par, x.mat=cbind(xy_dat$x))})),
            filter=purrr::map2(xy_dat, build, ~if(is.na(.y[1])){NA}else{dlm::dlmFilter((.x$y), .y)}),
            npar=purrr::pmap_dbl(tibble::lst(estimates, build,model_name), ~with(list(...),
-             if(model_name=="PenDlm"){
+             if(model_name%in%c("r2d2DLM","PenDlm")){
                        (length(estimates$obj$par)-1)}else{
                          get_npar(build)})),
 
-           AICc=purrr::pmap_dbl(tibble::lst(dat=xy_dat,estimates,build, npar,model_name), ~with(list(...), if(model_name=="PenDlm"){                                                                  get_AIC(dat$y, estimates, npar,mod_type="TMB")}else{
+           AICc=purrr::pmap_dbl(tibble::lst(dat=xy_dat,estimates,build, npar,model_name), ~with(list(...), if(model_name%in%c("r2d2DLM","PenDlm")){                                                                  get_AIC(dat$y, estimates, npar,mod_type="TMB")}else{
              get_AIC(dat$y, build, npar)})),
 
 
            pred=purrr::pmap_dbl(tibble::lst(filter,estimates,model_name), ~with(list(...), if(model_name=="PenDlm"){ (tail(estimates$obj$report()$pred,1))}else{
+             if(model_name=="r2d2DLM"){
+               estimates$obj$report()$mu_forecast
+             }else{
              (filter$f[length(filter$f)])
-           })),
+           }})),
 
            pred=if(scale_y){((pred*response_sd)+response_mu)}else{pred},
            pred=inverse_transformation(pred),

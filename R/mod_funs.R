@@ -97,6 +97,8 @@ tvInt <- function(parm, x.mat){
 
 pen_dlm_out<-pen_dlm
 
+
+
 if(!is.null(penDLM_formula)){
   formals(pen_dlm_out)$form<-penDLM_formula
 }
@@ -127,7 +129,8 @@ all_funs<-list(
   "tvCRzeroInt" = tvCRzeroInt,
   "constCRzeroInt" = constCRzeroInt,
   "tvInt" = tvInt,
-  "PenDlm" = pen_dlm_out
+  "PenDlm" = pen_dlm_out,
+  "r2d2DLM"=r2d2_dlm
 )
 
 all_funs[include]
