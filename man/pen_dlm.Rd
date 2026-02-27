@@ -25,7 +25,7 @@ pen_dlm(
 \item{gamma_scale}{scale paramter for the gamma prior on the expential distributions rate paramters.}
 }
 \value{
-a list with two components: the fitted TMB model object, which has the NLL and the linear predictors in the report(), as well as the outfut from the call to TMBhelper::fit_tmb(), which is used to optimize the model.
+a list with two components: the fitted TMB model object, which has the NLL and the linear predictors in the report(), as well as the output from the call to TMBhelper::fit_tmb(), which is used to optimize the model.
 }
 \description{
 function to fit a penalized dynamic linear regression model.

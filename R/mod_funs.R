@@ -97,7 +97,12 @@ tvInt <- function(parm, x.mat){
 
 pen_dlm_out<-pen_dlm
 
+r2d2_dlm_out<-r2d2_dlm
 
+
+if(!is.null(penDLM_formula)){
+  formals(r2d2_dlm_out)$form<-penDLM_formula
+}
 
 if(!is.null(penDLM_formula)){
   formals(pen_dlm_out)$form<-penDLM_formula
@@ -119,7 +124,7 @@ if(!is.null(penDLM_exp_rate)){
   formals(pen_dlm_out)$exp_rate<-penDLM_exp_rate
 }
 
-penDLM_exp_rate
+
 all_funs<-list(
   "constIntOnly" = constIntOnly,
   "tvIntOnly" = tvIntOnly,
@@ -130,7 +135,7 @@ all_funs<-list(
   "constCRzeroInt" = constCRzeroInt,
   "tvInt" = tvInt,
   "PenDlm" = pen_dlm_out,
-  "r2d2DLM"=r2d2_dlm
+  "r2d2DLM"=r2d2_dlm_out
 )
 
 all_funs[include]
