@@ -167,31 +167,21 @@ return(list(
 #' R2D2 penalized DLM in RTMB
 #'
 #' @description
-#' function to fit a penalized dynamic linear regression model.
+#' function to fit a dynamic linear regression model with r2dr shrinkage prior.
 #'
 #'
 #' @param dat dataframe with response and predictors
 #' @param form formula specifying linear predictor
-#' @param regu to avoid the standard deviations shrinking too small and running into numerical issues, the log of the standard deviation multiplied be these values are added to the log-likelihood (subtracted from the negative log-likelihood). Defaults are .05 and .05 for the penalties on the mean of the coefficients and the year-to-year variability.
-#' @param gamma_shape shape paramter for the gamma prior on the expential distributions rate paramters.
-#' @param gamma_scale scale paramter for the gamma prior on the expential distributions rate paramters.
+#' @param alpha_dirichlet  if null, 1 / number of covariates
+#' @param scale_evol whether to scale the variance of the dynamic part by the time series length so that it gets equivalent penalization as the initial value
+#' @param R2_a alpha for beta prior on R2
+#' @param R2_b alpha for beta prior on R2, if null (default) equal to number of covariates / 2
+#' @param rho_a alpha for beta prior on split between static and dynamic. default puts slightly more weight on static.
+#' @param rho_b beta for beta prior on split between static and dynamic. default puts slightly more weight on static.
+#' @param intercept_n_equiv multiplier on the amount of variance given to average covariate, which is given to intercept.
+#' @param sd_init_intercept sd on the intercept initial value
 #'
-#'@description
-#' The penalized complexity model puts penalties on the across-year means \eqn{\bar{\beta}} of each coefficient \eqn{\beta_t} for each year \eqn{t}, and the standard deviation of the steps in the random walk. So if the coefficients are:
-#'
-#' \deqn{\beta_t = \beta_{t-1} + \omega_t \\ \omega_t \sim \mathcal{N}(0,\sigma)}
-#'
-#' \deqn{\bar{\beta}\sim \mathcal{N}(0,\tau)}
-#'
-#' This model puts exponential-gamma penalties on all $\tau$ and $\sigma$ parameters, for which there is a unique parameter for each predictor in the model:
-#'
-#' \deqn{\tau,~\sigma \sim \text{exp}(\lambda) \\ \lambda \sim \text{Gamma}(\text{Shape}=10,~\text{Scale}=1)}
-#'
-#' where two unique \eqn{\lambda} parameters are fit for every predictor in the model.
-#'
-#' Additionally, \eqn{0.05*\text{log}(\tau, \sigma)} for all \eqn{\tau}s and \eqn{\sigma}s is added to the log-likelihood to keep their values from shrinking so small as to cause numerical problems during optimization.
-
-#' @return a list with two components: the fitted TMB model object, which has the NLL and the linear predictors in the report(), as well as the output from the call to TMBhelper::fit_tmb(), which is used to optimize the model.
+#' @return the fitted TMB model object, which has the NLL and the linear predictors in the report()
 #' @export
 #'
 r2d2_dlm<-function(dat,form=y~x,
@@ -201,8 +191,8 @@ r2d2_dlm<-function(dat,form=y~x,
                   R2_b            = NULL,#p_cov / 2,
                   rho_a           = 3.0,
                   rho_b           = 2.0,
-                  intercept_n_equiv = 3.0,       # intercept gets ~3 average-predictor-equivalents.
-                  sd_init_intercept = 3.0      # vague prior on initial intercept level (change to 1 if standardize y
+                  intercept_n_equiv = 3,       # intercept gets ~3 average-predictor-equivalents.
+                  sd_init_intercept = 1      # vague prior on initial intercept level (change to 1 if standardize y
                   ){
 
   T_total <- nrow(dat)
