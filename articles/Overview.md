@@ -67,8 +67,7 @@ of a yet younger age class (e.g., “Age2”).
 ### Forecasting
 
 Forecasts can be developed using the
-[`forecast_fun()`](https://wdfw-fp.github.io/sibregresr/reference/forecast_fun.md)
-function.
+[`forecast_fun()`](../reference/forecast_fun.md) function.
 
 ``` r
 
@@ -83,7 +82,7 @@ forecast<-forecast_fun(
   perf_yrs = 15,
   wt_yrs = NULL,
 )
-#> [1] "Time for model fitting was 16.8 secs"
+#> [1] "Time for model fitting was 16.7 secs"
 ```
 
 The arguments in the above call are set to the defaults, which includes
@@ -113,28 +112,28 @@ ensemble) model are needed for performance-based model weighting. This
 is because the first of the 15 years of performance-based ensemble
 forecasts uses weights based on performance of the components in the
 previous 15 years. A call to
-[`forecast_fun()`](https://wdfw-fp.github.io/sibregresr/reference/forecast_fun.md)
-will produce a warning if the number of forecasts needed is greater that
-the number of data points minus five (assuming at least five years
-should be available to produce the first forecast).
+[`forecast_fun()`](../reference/forecast_fun.md) will produce a warning
+if the number of forecasts needed is greater that the number of data
+points minus five (assuming at least five years should be available to
+produce the first forecast).
 
 ### Output
 
 The output of a call to the
-[`forecast_fun()`](https://wdfw-fp.github.io/sibregresr/reference/forecast_fun.md)
-function is a list of two data frames. The “fits” data frame has
-information on the model fitting that could be useful if some of the
-models failed to fit. The “forecasts” data frame has a row for every
-year, age, stock, and model, including model averages. Included in the
-data frame are the observed and forecasted returns as well as several
-performance metrics. Definitions for all of the variables in the data
-frame are prodived in the documentation for the
-[`performance_weights()`](https://wdfw-fp.github.io/sibregresr/reference/performance_weights.md)
-function, which can be accessed by a call to `?performance_weights()`.
-The total forecast for returns summed across ages for a given model are
-included with the sum of the component ages in the “Age” field. Fore
-example, when forecasting returns of ages 4, 5, and 6, the total would
-have a value of 15 in the “Age” field.
+[`forecast_fun()`](../reference/forecast_fun.md) function is a list of
+two data frames. The “fits” data frame has information on the model
+fitting that could be useful if some of the models failed to fit. The
+“forecasts” data frame has a row for every year, age, stock, and model,
+including model averages. Included in the data frame are the observed
+and forecasted returns as well as several performance metrics.
+Definitions for all of the variables in the data frame are prodived in
+the documentation for the
+[`performance_weights()`](../reference/performance_weights.md) function,
+which can be accessed by a call to `?performance_weights()`. The total
+forecast for returns summed across ages for a given model are included
+with the sum of the component ages in the “Age” field. Fore example,
+when forecasting returns of ages 4, 5, and 6, the total would have a
+value of 15 in the “Age” field.
 
 Here is an example of some of the information available in the
 “forecasts” data frame – the predictions of all the different ensemble
@@ -177,13 +176,13 @@ given year, those three years would be used to calculate the forecast
 standard deviation and prediction intervals, however, if 20 years of the
 ensemble forecast were available, only the most recent 15 years would be
 used. The “n_sd” field in the output of a call to
-[`forecast_fun()`](https://wdfw-fp.github.io/sibregresr/reference/forecast_fun.md)
-provides the number of years used to calculate prediction intervals for
-that forecast. The number of years used to calculate weights for an
-ensemble forecast is conducted in the same way (i.e., all available up
-to “wt_yrs”) and the “n_wts” field in the output gives the number of
-years used. This is not relevant for ensembles based on AICc weighting
-as they are based on the AICc value for models fit for the current year.
+[`forecast_fun()`](../reference/forecast_fun.md) provides the number of
+years used to calculate prediction intervals for that forecast. The
+number of years used to calculate weights for an ensemble forecast is
+conducted in the same way (i.e., all available up to “wt_yrs”) and the
+“n_wts” field in the output gives the number of years used. This is not
+relevant for ensembles based on AICc weighting as they are based on the
+AICc value for models fit for the current year.
 
 ### Plotting and reporting (beta version)
 
@@ -212,8 +211,8 @@ make_table(forecast$forecasts,"MAPE_weight")
 
 I’ve started a report template, but quite a bit more work is probably
 needed. If the forecasting has already been conducted with a call to
-[`forecast_fun()`](https://wdfw-fp.github.io/sibregresr/reference/forecast_fun.md)
-as above, you can generate the report with a call like:
+[`forecast_fun()`](../reference/forecast_fun.md) as above, you can
+generate the report with a call like:
 
 ``` r
 
@@ -224,39 +223,34 @@ forecast_report(forecast$forecasts,
 ```
 
 but you can also feed the
-[`forecast_report()`](https://wdfw-fp.github.io/sibregresr/reference/forecast_report.md)
-function the raw data and the arguments that you would feed to
-[`forecast_fun()`](https://wdfw-fp.github.io/sibregresr/reference/forecast_fun.md)
-in order to do it all in one function call. The disadvantage of this is
-that you will only get the output for one model (e.g., “MAPE_weight”)
-wheras if you fit save the output from a call to
-[`forecast_fun()`](https://wdfw-fp.github.io/sibregresr/reference/forecast_fun.md),
-you can investigate them all and render report for multiple models if
-desired without having to refit.
+[`forecast_report()`](../reference/forecast_report.md) function the raw
+data and the arguments that you would feed to
+[`forecast_fun()`](../reference/forecast_fun.md) in order to do it all
+in one function call. The disadvantage of this is that you will only get
+the output for one model (e.g., “MAPE_weight”) wheras if you fit save
+the output from a call to
+[`forecast_fun()`](../reference/forecast_fun.md), you can investigate
+them all and render report for multiple models if desired without having
+to refit.
 
 ## Under the `Forecast_fun()` hood
 
 The `Forecast_fun()` is a wrapper around the
-[`mod_funs()`](https://wdfw-fp.github.io/sibregresr/reference/mod_funs.md),[`setup_data()`](https://wdfw-fp.github.io/sibregresr/reference/setup_data.md),[`fit_mods()`](https://wdfw-fp.github.io/sibregresr/reference/fit_mods.md),
-and
-[`performance_weights()`](https://wdfw-fp.github.io/sibregresr/reference/performance_weights.md)
+[`mod_funs()`](../reference/mod_funs.md),[`setup_data()`](../reference/setup_data.md),[`fit_mods()`](../reference/fit_mods.md),
+and [`performance_weights()`](../reference/performance_weights.md)
 functions.
 
-- [`mod_funs()`](https://wdfw-fp.github.io/sibregresr/reference/mod_funs.md)
-  generates a list of functions that fit individual models. This list is
-  passed to,
-- [`setup_data()`](https://wdfw-fp.github.io/sibregresr/reference/setup_data.md),
-  which generates a nested data frame with a row for each combination of
-  subset of the data (i.e., with some number of years cutoff the end)
-  and model. Each row represents a model that must be fit and prediction
-  made, and this function kicks off the process using a list-column
-  workflow.
-- The
-  [`fit_mods()`](https://wdfw-fp.github.io/sibregresr/reference/fit_mods.md)
-  function does a few data transformation steps and conducts the model
-  fitting.
+- [`mod_funs()`](../reference/mod_funs.md) generates a list of functions
+  that fit individual models. This list is passed to,
+- [`setup_data()`](../reference/setup_data.md), which generates a nested
+  data frame with a row for each combination of subset of the data
+  (i.e., with some number of years cutoff the end) and model. Each row
+  represents a model that must be fit and prediction made, and this
+  function kicks off the process using a list-column workflow.
+- The [`fit_mods()`](../reference/fit_mods.md) function does a few data
+  transformation steps and conducts the model fitting.
 - Finally, the
-  [`performance_weights()`](https://wdfw-fp.github.io/sibregresr/reference/performance_weights.md)
+  [`performance_weights()`](../reference/performance_weights.md)
   function uses the fitted model objects to produce forecasts, assesses
   performance, generates ensembles, and generates preduction intervals.
 
@@ -297,7 +291,7 @@ pen_dlm_forecast<-forecast_fun(
   perf_yrs = 15,
   wt_yrs = 1,
 )
-#> [1] "Time for model fitting was 6.2 secs"
+#> [1] "Time for model fitting was 6 secs"
 
 pen_dlm_forecast$forecasts |> dplyr::filter(ReturnYear==max(ReturnYear),model_name=="PenDlm") |> dplyr::select(Stock,Pred,MAPE,RMSE,MPE,MEr) |> dplyr::arrange(Stock,Age,MAPE)|> dplyr::mutate(dplyr::across(where(is.numeric),round))
 #> # A tibble: 4 × 8
@@ -363,11 +357,9 @@ The model handles missing covariate values by fitting them as random
 effects with a $\mathcal{N}(0,1)$ prior.
 
 The formula for the model is provided to the
-[`mod_funs()`](https://wdfw-fp.github.io/sibregresr/reference/mod_funs.md)
-function and the covariate data to the
-[`fit_mods()`](https://wdfw-fp.github.io/sibregresr/reference/fit_mods.md)
-function, but both can be passed through the
-[`forecast_fun()`](https://wdfw-fp.github.io/sibregresr/reference/forecast_fun.md)
+[`mod_funs()`](../reference/mod_funs.md) function and the covariate data
+to the [`fit_mods()`](../reference/fit_mods.md) function, but both can
+be passed through the [`forecast_fun()`](../reference/forecast_fun.md)
 function as well. When specifying the formula, “x” is used to represent
 the sibling predictor. So the formula specified below would include the
 sibling predictor as well as PDO and NPGO from two years prior to when
@@ -387,7 +379,7 @@ pen_dlm_forecast_cov<-forecast_fun(
   covariates = covariates_24,
   penDLM_formula =formula("y~ x + lag2_PDO + lag2_NPGO")
 )
-#> [1] "Time for model fitting was 5.5 secs"
+#> [1] "Time for model fitting was 5.2 secs"
 
 pen_dlm_forecast_cov$forecasts |> dplyr::filter(ReturnYear==max(ReturnYear),model_name=="PenDlm") |>
   dplyr::mutate(model_name="PenDlm_cov") |> 
@@ -404,11 +396,10 @@ dplyr::select(Stock,Pred,MAPE,RMSE,MPE,MEr) |> dplyr::arrange(Stock,Age,MAPE)|> 
 
 The shape and scale parameters of the gamma prior can be controlled with
 the `penDLM_gamma_shape` and `penDLM_gamma_scale` arguments to
-[`mod_funs()`](https://wdfw-fp.github.io/sibregresr/reference/mod_funs.md)
-or
-[`forecast_fun()`](https://wdfw-fp.github.io/sibregresr/reference/forecast_fun.md).
-The fraction of the log of the $\sigma$s that is added to the
-log-likelihood can be controlled with the `penDLM_regu` argument.
+[`mod_funs()`](../reference/mod_funs.md) or
+[`forecast_fun()`](../reference/forecast_fun.md). The fraction of the
+log of the $\sigma$s that is added to the log-likelihood can be
+controlled with the `penDLM_regu` argument.
 
 ## More general description of the modeling process
 

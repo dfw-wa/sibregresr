@@ -1,11 +1,10 @@
 # Render a report of forecast results
 
 There are two options: 1) provide an the output of a call to
-[`forecast_fun()`](https://wdfw-fp.github.io/sibregresr/reference/forecast_fun.md)or
-[`performance_weights()`](https://wdfw-fp.github.io/sibregresr/reference/performance_weights.md)
-or 2) provide raw data and the specify the arguments as needed for a
-call to
-[`forecast_fun()`](https://wdfw-fp.github.io/sibregresr/reference/forecast_fun.md)
+[`forecast_fun()`](forecast_fun.md)or
+[`performance_weights()`](performance_weights.md) or 2) provide raw data
+and the specify the arguments as needed for a call to
+[`forecast_fun()`](forecast_fun.md)
 
 ## Usage
 
@@ -34,9 +33,8 @@ forecast_report(
 
 - forecasts:
 
-  an the output of a call to
-  [`forecast_fun()`](https://wdfw-fp.github.io/sibregresr/reference/forecast_fun.md)
-  or `performance_weights`
+  an the output of a call to [`forecast_fun()`](forecast_fun.md) or
+  `performance_weights`
 
 - mod_name:
 

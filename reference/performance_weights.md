@@ -74,13 +74,13 @@ given year, those three years would be used to calculate the forecast
 standard deviation and prediction intervals, however, if 20 years of the
 ensemble forecast were available, only the most recent 15 years would be
 used. The "n_sd" field in the output of a call to
-[`forecast_fun()`](https://wdfw-fp.github.io/sibregresr/reference/forecast_fun.md)
-provides the number of years used to calculate prediction intervals for
-that forecast. The number of years used to calculate weights for an
-ensemble forecast is conducted in the same way (i.e., all available up
-to "wt_yrs") and the "n_wts" field in the output gives the number of
-years used. This is not relevant for ensembles based on AICc weighting
-as they are based on the AICc value for models fit for the current year.
+[`forecast_fun()`](forecast_fun.md) provides the number of years used to
+calculate prediction intervals for that forecast. The number of years
+used to calculate weights for an ensemble forecast is conducted in the
+same way (i.e., all available up to "wt_yrs") and the "n_wts" field in
+the output gives the number of years used. This is not relevant for
+ensembles based on AICc weighting as they are based on the AICc value
+for models fit for the current year.
 
 - *model_name* is the name of the model used for forecast. It includes
   the compenent of the ensembles and the ensembles. Additionally, "best"

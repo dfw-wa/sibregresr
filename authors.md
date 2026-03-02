@@ -12,16 +12,16 @@
 ## Citation
 
 Source:
-[`DESCRIPTION`](https://github.com/wdfw-fp/sibregresr/blob/main/DESCRIPTION)
+[`DESCRIPTION`](https://github.com/dfw-wa/sibregresr/blob/main/DESCRIPTION)
 
 Buehrens T, Cox B, Sorel M (2026). *sibregresr: Sibling Regression
 Salmon Forecasting*. R package version 0.0.0.9000,
-<https://github.com/wdfw-fp/sibregresr>.
+<https://github.com/dfw-wa/sibregresr>.
 
     @Manual{,
       title = {sibregresr: Sibling Regression Salmon Forecasting},
       author = {Thomas Buehrens and Ben Cox and Mark Sorel},
       year = {2026},
       note = {R package version 0.0.0.9000},
-      url = {https://github.com/wdfw-fp/sibregresr},
+      url = {https://github.com/dfw-wa/sibregresr},
     }

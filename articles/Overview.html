@@ -41,7 +41,7 @@
 <li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json">
 </form></li>
-<li class="nav-item"><a class="external-link nav-link" href="https://github.com/wdfw-fp/sibregresr/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://github.com/dfw-wa/sibregresr/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
       </ul>
 </div>
 
@@ -58,7 +58,7 @@
       <h1>Overview</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/wdfw-fp/sibregresr/blob/main/vignettes/Overview.Rmd" class="external-link"><code>vignettes/Overview.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/dfw-wa/sibregresr/blob/main/vignettes/Overview.Rmd" class="external-link"><code>vignettes/Overview.Rmd</code></a></small>
       <div class="d-none name"><code>Overview.Rmd</code></div>
     </div>
 
@@ -83,7 +83,7 @@ averaging.</p>
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"devtools"</span><span class="op">)</span></span>
 <span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"dfw-wa/sibregresr"</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/wdfw-fp/sibregresr" class="external-link">sibregresr</a></span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/dfw-wa/sibregresr" class="external-link">sibregresr</a></span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="getting-started">Getting started<a class="anchor" aria-label="anchor" href="#getting-started"></a>
@@ -140,7 +140,7 @@ function.</p>
 <span>  perf_yrs <span class="op">=</span> <span class="fl">15</span>,</span>
 <span>  wt_yrs <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "Time for model fitting was 16.8 secs"</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] "Time for model fitting was 16.7 secs"</span></span></code></pre></div>
 <p>The arguments in the above call are set to the defaults, which
 includes 7 models in the ensembles, log transforms the response and
 predictor, and does not scale the predictor and response prior to
@@ -251,63 +251,63 @@ refining this though, so it is an area for further development.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/make_table.html">make_table</a></span><span class="op">(</span><span class="va">forecast</span><span class="op">$</span><span class="va">forecasts</span>,<span class="st">"MAPE_weight"</span><span class="op">)</span></span></code></pre></div>
 <div class="tabwid">
-<style>.cl-96f9c140{}.cl-96f0e57a{font-family:'DejaVu Sans';font-size:11pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-96f50542{margin:0;text-align:left;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-96f532f6{width:0.668in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 1.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-96f53300{width:0.94in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 1.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-96f53301{width:1.507in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 1.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-96f53302{width:0.82in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 1.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-96f5330a{width:0.778in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 1.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-96f5330b{width:1.302in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 1.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-96f5330c{width:0.668in;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-96f53314{width:0.94in;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-96f53315{width:1.507in;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-96f53316{width:0.82in;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-96f5331e{width:0.778in;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-96f5331f{width:1.302in;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-96f53320{width:0.668in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-96f53321{width:0.94in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-96f53328{width:1.507in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-96f53329{width:0.82in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-96f53332{width:0.778in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-96f53333{width:1.302in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}</style>
-<table data-quarto-disable-processing="true" class="table cl-96f9c140">
+<style>.cl-3c0f74cc{}.cl-3c06cb4c{font-family:'DejaVu Sans';font-size:11pt;font-weight:normal;font-style:normal;text-decoration:none;color:rgba(0, 0, 0, 1.00);background-color:transparent;}.cl-3c0ad48a{margin:0;text-align:left;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);padding-bottom:5pt;padding-top:5pt;padding-left:5pt;padding-right:5pt;line-height: 1;background-color:transparent;}.cl-3c0b01a8{width:0.668in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 1.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-3c0b01b2{width:0.94in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 1.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-3c0b01bc{width:1.507in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 1.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-3c0b01bd{width:0.82in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 1.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-3c0b01be{width:0.778in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 1.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-3c0b01c6{width:1.302in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 1.5pt solid rgba(102, 102, 102, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-3c0b01c7{width:0.668in;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-3c0b01d0{width:0.94in;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-3c0b01d1{width:1.507in;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-3c0b01d2{width:0.82in;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-3c0b01da{width:0.778in;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-3c0b01db{width:1.302in;background-color:transparent;vertical-align: middle;border-bottom: 0 solid rgba(0, 0, 0, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-3c0b01dc{width:0.668in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-3c0b01e4{width:0.94in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-3c0b01e5{width:1.507in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-3c0b01e6{width:0.82in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-3c0b01e7{width:0.778in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}.cl-3c0b01ee{width:1.302in;background-color:transparent;vertical-align: middle;border-bottom: 1.5pt solid rgba(102, 102, 102, 1.00);border-top: 0 solid rgba(0, 0, 0, 1.00);border-left: 0 solid rgba(0, 0, 0, 1.00);border-right: 0 solid rgba(0, 0, 0, 1.00);margin-bottom:0;margin-top:0;margin-left:0;margin-right:0;}</style>
+<table data-quarto-disable-processing="true" class="table cl-3c0f74cc">
 <thead><tr style="overflow-wrap:break-word;">
-<th class="cl-96f532f6"><p class="cl-96f50542"><span class="cl-96f0e57a">Age</span></p></th>
-<th class="cl-96f53300"><p class="cl-96f50542"><span class="cl-96f0e57a">Forecast</span></p></th>
-<th class="cl-96f53301"><p class="cl-96f50542"><span class="cl-96f0e57a">50%CI</span></p></th>
-<th class="cl-96f53301"><p class="cl-96f50542"><span class="cl-96f0e57a">90%CI</span></p></th>
-<th class="cl-96f53302"><p class="cl-96f50542"><span class="cl-96f0e57a">MAPE</span></p></th>
-<th class="cl-96f53302"><p class="cl-96f50542"><span class="cl-96f0e57a">RMSE</span></p></th>
-<th class="cl-96f53302"><p class="cl-96f50542"><span class="cl-96f0e57a">MPE</span></p></th>
-<th class="cl-96f5330a"><p class="cl-96f50542"><span class="cl-96f0e57a">MEr</span></p></th>
-<th class="cl-96f5330b"><p class="cl-96f50542"><span class="cl-96f0e57a">model_name</span></p></th>
+<th class="cl-3c0b01a8"><p class="cl-3c0ad48a"><span class="cl-3c06cb4c">Age</span></p></th>
+<th class="cl-3c0b01b2"><p class="cl-3c0ad48a"><span class="cl-3c06cb4c">Forecast</span></p></th>
+<th class="cl-3c0b01bc"><p class="cl-3c0ad48a"><span class="cl-3c06cb4c">50%CI</span></p></th>
+<th class="cl-3c0b01bc"><p class="cl-3c0ad48a"><span class="cl-3c06cb4c">90%CI</span></p></th>
+<th class="cl-3c0b01bd"><p class="cl-3c0ad48a"><span class="cl-3c06cb4c">MAPE</span></p></th>
+<th class="cl-3c0b01bd"><p class="cl-3c0ad48a"><span class="cl-3c06cb4c">RMSE</span></p></th>
+<th class="cl-3c0b01bd"><p class="cl-3c0ad48a"><span class="cl-3c06cb4c">MPE</span></p></th>
+<th class="cl-3c0b01be"><p class="cl-3c0ad48a"><span class="cl-3c06cb4c">MEr</span></p></th>
+<th class="cl-3c0b01c6"><p class="cl-3c0ad48a"><span class="cl-3c06cb4c">model_name</span></p></th>
 </tr></thead>
 <tbody>
 <tr style="overflow-wrap:break-word;">
-<td class="cl-96f5330c"><p class="cl-96f50542"><span class="cl-96f0e57a">4</span></p></td>
-<td class="cl-96f53314"><p class="cl-96f50542"><span class="cl-96f0e57a">22,606</span></p></td>
-<td class="cl-96f53315"><p class="cl-96f50542"><span class="cl-96f0e57a">16,986 - 30,086</span></p></td>
-<td class="cl-96f53315"><p class="cl-96f50542"><span class="cl-96f0e57a">11,259 - 45,391</span></p></td>
-<td class="cl-96f53316"><p class="cl-96f50542"><span class="cl-96f0e57a">    40</span></p></td>
-<td class="cl-96f53316"><p class="cl-96f50542"><span class="cl-96f0e57a">19,475</span></p></td>
-<td class="cl-96f53316"><p class="cl-96f50542"><span class="cl-96f0e57a">    14</span></p></td>
-<td class="cl-96f5331e"><p class="cl-96f50542"><span class="cl-96f0e57a"> 2,290</span></p></td>
-<td class="cl-96f5331f"><p class="cl-96f50542"><span class="cl-96f0e57a">MAPE_weight</span></p></td>
+<td class="cl-3c0b01c7"><p class="cl-3c0ad48a"><span class="cl-3c06cb4c">4</span></p></td>
+<td class="cl-3c0b01d0"><p class="cl-3c0ad48a"><span class="cl-3c06cb4c">22,606</span></p></td>
+<td class="cl-3c0b01d1"><p class="cl-3c0ad48a"><span class="cl-3c06cb4c">16,986 - 30,086</span></p></td>
+<td class="cl-3c0b01d1"><p class="cl-3c0ad48a"><span class="cl-3c06cb4c">11,259 - 45,391</span></p></td>
+<td class="cl-3c0b01d2"><p class="cl-3c0ad48a"><span class="cl-3c06cb4c">    40</span></p></td>
+<td class="cl-3c0b01d2"><p class="cl-3c0ad48a"><span class="cl-3c06cb4c">19,475</span></p></td>
+<td class="cl-3c0b01d2"><p class="cl-3c0ad48a"><span class="cl-3c06cb4c">    14</span></p></td>
+<td class="cl-3c0b01da"><p class="cl-3c0ad48a"><span class="cl-3c06cb4c"> 2,290</span></p></td>
+<td class="cl-3c0b01db"><p class="cl-3c0ad48a"><span class="cl-3c06cb4c">MAPE_weight</span></p></td>
 </tr>
 <tr style="overflow-wrap:break-word;">
-<td class="cl-96f5330c"><p class="cl-96f50542"><span class="cl-96f0e57a">5</span></p></td>
-<td class="cl-96f53314"><p class="cl-96f50542"><span class="cl-96f0e57a">15,140</span></p></td>
-<td class="cl-96f53315"><p class="cl-96f50542"><span class="cl-96f0e57a">11,419 - 20,073</span></p></td>
-<td class="cl-96f53315"><p class="cl-96f50542"><span class="cl-96f0e57a"> 7,610 - 30,119</span></p></td>
-<td class="cl-96f53316"><p class="cl-96f50542"><span class="cl-96f0e57a">    39</span></p></td>
-<td class="cl-96f53316"><p class="cl-96f50542"><span class="cl-96f0e57a"> 9,690</span></p></td>
-<td class="cl-96f53316"><p class="cl-96f50542"><span class="cl-96f0e57a">    16</span></p></td>
-<td class="cl-96f5331e"><p class="cl-96f50542"><span class="cl-96f0e57a">  -686</span></p></td>
-<td class="cl-96f5331f"><p class="cl-96f50542"><span class="cl-96f0e57a">MAPE_weight</span></p></td>
+<td class="cl-3c0b01c7"><p class="cl-3c0ad48a"><span class="cl-3c06cb4c">5</span></p></td>
+<td class="cl-3c0b01d0"><p class="cl-3c0ad48a"><span class="cl-3c06cb4c">15,140</span></p></td>
+<td class="cl-3c0b01d1"><p class="cl-3c0ad48a"><span class="cl-3c06cb4c">11,419 - 20,073</span></p></td>
+<td class="cl-3c0b01d1"><p class="cl-3c0ad48a"><span class="cl-3c06cb4c"> 7,610 - 30,119</span></p></td>
+<td class="cl-3c0b01d2"><p class="cl-3c0ad48a"><span class="cl-3c06cb4c">    39</span></p></td>
+<td class="cl-3c0b01d2"><p class="cl-3c0ad48a"><span class="cl-3c06cb4c"> 9,690</span></p></td>
+<td class="cl-3c0b01d2"><p class="cl-3c0ad48a"><span class="cl-3c06cb4c">    16</span></p></td>
+<td class="cl-3c0b01da"><p class="cl-3c0ad48a"><span class="cl-3c06cb4c">  -686</span></p></td>
+<td class="cl-3c0b01db"><p class="cl-3c0ad48a"><span class="cl-3c06cb4c">MAPE_weight</span></p></td>
 </tr>
 <tr style="overflow-wrap:break-word;">
-<td class="cl-96f5330c"><p class="cl-96f50542"><span class="cl-96f0e57a">6</span></p></td>
-<td class="cl-96f53314"><p class="cl-96f50542"><span class="cl-96f0e57a">   936</span></p></td>
-<td class="cl-96f53315"><p class="cl-96f50542"><span class="cl-96f0e57a">   181 -  4,830</span></p></td>
-<td class="cl-96f53315"><p class="cl-96f50542"><span class="cl-96f0e57a">    17 - 51,231</span></p></td>
-<td class="cl-96f53316"><p class="cl-96f50542"><span class="cl-96f0e57a">14,321</span></p></td>
-<td class="cl-96f53316"><p class="cl-96f50542"><span class="cl-96f0e57a"> 4,429</span></p></td>
-<td class="cl-96f53316"><p class="cl-96f50542"><span class="cl-96f0e57a">14,244</span></p></td>
-<td class="cl-96f5331e"><p class="cl-96f50542"><span class="cl-96f0e57a">-2,072</span></p></td>
-<td class="cl-96f5331f"><p class="cl-96f50542"><span class="cl-96f0e57a">MAPE_weight</span></p></td>
+<td class="cl-3c0b01c7"><p class="cl-3c0ad48a"><span class="cl-3c06cb4c">6</span></p></td>
+<td class="cl-3c0b01d0"><p class="cl-3c0ad48a"><span class="cl-3c06cb4c">   936</span></p></td>
+<td class="cl-3c0b01d1"><p class="cl-3c0ad48a"><span class="cl-3c06cb4c">   181 -  4,830</span></p></td>
+<td class="cl-3c0b01d1"><p class="cl-3c0ad48a"><span class="cl-3c06cb4c">    17 - 51,231</span></p></td>
+<td class="cl-3c0b01d2"><p class="cl-3c0ad48a"><span class="cl-3c06cb4c">14,321</span></p></td>
+<td class="cl-3c0b01d2"><p class="cl-3c0ad48a"><span class="cl-3c06cb4c"> 4,429</span></p></td>
+<td class="cl-3c0b01d2"><p class="cl-3c0ad48a"><span class="cl-3c06cb4c">14,244</span></p></td>
+<td class="cl-3c0b01da"><p class="cl-3c0ad48a"><span class="cl-3c06cb4c">-2,072</span></p></td>
+<td class="cl-3c0b01db"><p class="cl-3c0ad48a"><span class="cl-3c06cb4c">MAPE_weight</span></p></td>
 </tr>
 <tr style="overflow-wrap:break-word;">
-<td class="cl-96f53320"><p class="cl-96f50542"><span class="cl-96f0e57a">Total</span></p></td>
-<td class="cl-96f53321"><p class="cl-96f50542"><span class="cl-96f0e57a">38,682</span></p></td>
-<td class="cl-96f53328"><p class="cl-96f50542"><span class="cl-96f0e57a">30,728 - 48,695</span></p></td>
-<td class="cl-96f53328"><p class="cl-96f50542"><span class="cl-96f0e57a">22,065 - 67,814</span></p></td>
-<td class="cl-96f53329"><p class="cl-96f50542"><span class="cl-96f0e57a">    28</span></p></td>
-<td class="cl-96f53329"><p class="cl-96f50542"><span class="cl-96f0e57a">26,788</span></p></td>
-<td class="cl-96f53329"><p class="cl-96f50542"><span class="cl-96f0e57a">     5</span></p></td>
-<td class="cl-96f53332"><p class="cl-96f50542"><span class="cl-96f0e57a">  -468</span></p></td>
-<td class="cl-96f53333"><p class="cl-96f50542"><span class="cl-96f0e57a">MAPE_weight</span></p></td>
+<td class="cl-3c0b01dc"><p class="cl-3c0ad48a"><span class="cl-3c06cb4c">Total</span></p></td>
+<td class="cl-3c0b01e4"><p class="cl-3c0ad48a"><span class="cl-3c06cb4c">38,682</span></p></td>
+<td class="cl-3c0b01e5"><p class="cl-3c0ad48a"><span class="cl-3c06cb4c">30,728 - 48,695</span></p></td>
+<td class="cl-3c0b01e5"><p class="cl-3c0ad48a"><span class="cl-3c06cb4c">22,065 - 67,814</span></p></td>
+<td class="cl-3c0b01e6"><p class="cl-3c0ad48a"><span class="cl-3c06cb4c">    28</span></p></td>
+<td class="cl-3c0b01e6"><p class="cl-3c0ad48a"><span class="cl-3c06cb4c">26,788</span></p></td>
+<td class="cl-3c0b01e6"><p class="cl-3c0ad48a"><span class="cl-3c06cb4c">     5</span></p></td>
+<td class="cl-3c0b01e7"><p class="cl-3c0ad48a"><span class="cl-3c06cb4c">  -468</span></p></td>
+<td class="cl-3c0b01ee"><p class="cl-3c0ad48a"><span class="cl-3c06cb4c">MAPE_weight</span></p></td>
 </tr>
 </tbody>
 </table>
@@ -389,7 +389,7 @@ model averaging happening.</p>
 <span>  perf_yrs <span class="op">=</span> <span class="fl">15</span>,</span>
 <span>  wt_yrs <span class="op">=</span> <span class="fl">1</span>,</span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "Time for model fitting was 6.2 secs"</span></span>
+<span><span class="co">#&gt; [1] "Time for model fitting was 6 secs"</span></span>
 <span></span>
 <span><span class="va">pen_dlm_forecast</span><span class="op">$</span><span class="va">forecasts</span> <span class="op">|&gt;</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">ReturnYear</span><span class="op">==</span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">ReturnYear</span><span class="op">)</span>,<span class="va">model_name</span><span class="op">==</span><span class="st">"PenDlm"</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">Stock</span>,<span class="va">Pred</span>,<span class="va">MAPE</span>,<span class="va">RMSE</span>,<span class="va">MPE</span>,<span class="va">MEr</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="va">Stock</span>,<span class="va">Age</span>,<span class="va">MAPE</span><span class="op">)</span><span class="op">|&gt;</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span><span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/across.html" class="external-link">across</a></span><span class="op">(</span><span class="fu">where</span><span class="op">(</span><span class="va">is.numeric</span><span class="op">)</span>,<span class="va">round</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 4 × 8</span></span></span>
@@ -486,7 +486,7 @@ them.</p>
 <span>  covariates <span class="op">=</span> <span class="va">covariates_24</span>,</span>
 <span>  penDLM_formula <span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/stats/formula.html" class="external-link">formula</a></span><span class="op">(</span><span class="st">"y~ x + lag2_PDO + lag2_NPGO"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "Time for model fitting was 5.5 secs"</span></span>
+<span><span class="co">#&gt; [1] "Time for model fitting was 5.2 secs"</span></span>
 <span></span>
 <span><span class="va">pen_dlm_forecast_cov</span><span class="op">$</span><span class="va">forecasts</span> <span class="op">|&gt;</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">ReturnYear</span><span class="op">==</span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">ReturnYear</span><span class="op">)</span>,<span class="va">model_name</span><span class="op">==</span><span class="st">"PenDlm"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>model_name<span class="op">=</span><span class="st">"PenDlm_cov"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>

@@ -77,12 +77,10 @@ forecast_fun(
 ## Value
 
 A list of two dataframes: *fits* is the output of the call to
-[`fit_mods()`](https://wdfw-fp.github.io/sibregresr/reference/fit_mods.md)
-and potentially useful information about models that failed to fit.
-*forecasts* is the output of a call to
-[`performance_weights()`](https://wdfw-fp.github.io/sibregresr/reference/performance_weights.md)
-with ensemble forecasts, forecasts from component models, and
-performance measures
+[`fit_mods()`](fit_mods.md) and potentially useful information about
+models that failed to fit. *forecasts* is the output of a call to
+[`performance_weights()`](performance_weights.md) with ensemble
+forecasts, forecasts from component models, and performance measures
 
 ## Details
 
