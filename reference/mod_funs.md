@@ -8,11 +8,7 @@ functions to build models
 mod_funs(
   include = c("constIntOnly", "tvIntOnly", "tvSlope", "constLM", "tvCRzeroInt",
     "constCRzeroInt", "tvInt"),
-  penDLM_formula = NULL,
-  penDLM_regu = NULL,
-  penDLM_gamma_shape = NULL,
-  penDLM_gamma_scale = NULL,
-  penDLM_exp_rate = NULL
+  ...
 )
 ```
 
@@ -22,27 +18,11 @@ mod_funs(
 
   vector of names of models to include. Default is all options
 
-- penDLM_formula:
+- ...:
 
-  an optional r formula object to pass to the penalized DLM model.
-  Default is NULL, which would use the defaulte value formula("y~x")
-  from the pen_dlm function.
-
-- penDLM_regu:
-
-  scaler for the addition of the log of standard deviations to the
-  log-likelihood as a regularizer. See penealized_dlm help for more
-  details
-
-- penDLM_gamma_shape:
-
-  shape parameter for the gamma prior on the exponential distribution
-  rate parameter. See penealized_dlm help for more details
-
-- penDLM_gamma_scale:
-
-  scale parameter for the gamma prior on the exponential distribution
-  rate parameter.See penealized_dlm help for more details
+  named arguments passed through to `pen_dlm` or `r2d2_dlm` (or both, if
+  the argument name exists in both). Use the actual argument names from
+  those functions (e.g. `form`, `regu`, `gamma_shape`, `R2_a`, etc.).
 
 ## Value
 

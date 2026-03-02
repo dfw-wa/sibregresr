@@ -83,7 +83,7 @@ forecast<-forecast_fun(
   perf_yrs = 15,
   wt_yrs = NULL,
 )
-#> [1] "Time for model fitting was 17 secs"
+#> [1] "Time for model fitting was 17.2 secs"
 ```
 
 The arguments in the above call are set to the defaults, which includes
@@ -297,7 +297,7 @@ pen_dlm_forecast<-forecast_fun(
   perf_yrs = 15,
   wt_yrs = 1,
 )
-#> [1] "Time for model fitting was 6.3 secs"
+#> [1] "Time for model fitting was 6.2 secs"
 
 pen_dlm_forecast$forecasts |> dplyr::filter(ReturnYear==max(ReturnYear),model_name=="PenDlm") |> dplyr::select(Stock,Pred,MAPE,RMSE,MPE,MEr) |> dplyr::arrange(Stock,Age,MAPE)|> dplyr::mutate(dplyr::across(where(is.numeric),round))
 #> # A tibble: 4 × 8
@@ -387,7 +387,7 @@ pen_dlm_forecast_cov<-forecast_fun(
   covariates = covariates_24,
   penDLM_formula =formula("y~ x + lag2_PDO + lag2_NPGO")
 )
-#> [1] "Time for model fitting was 10.1 secs"
+#> [1] "Time for model fitting was 5.4 secs"
 
 pen_dlm_forecast_cov$forecasts |> dplyr::filter(ReturnYear==max(ReturnYear),model_name=="PenDlm") |>
   dplyr::mutate(model_name="PenDlm_cov") |> 
@@ -396,10 +396,10 @@ dplyr::select(Stock,Pred,MAPE,RMSE,MPE,MEr) |> dplyr::arrange(Stock,Age,MAPE)|> 
 #> # Groups:   Stock, Age, model_name [4]
 #>     Age model_name Stock           Pred  MAPE  RMSE   MPE   MEr
 #>   <dbl> <chr>      <chr>          <dbl> <dbl> <dbl> <dbl> <dbl>
-#> 1     4 PenDlm_cov Summer_Chinook 23969    37 16688    12   318
-#> 2     5 PenDlm_cov Summer_Chinook 14352    46 13780     9 -3250
-#> 3     6 PenDlm_cov Summer_Chinook  1024 16312  3371 16256  -874
-#> 4   115 PenDlm_cov Summer_Chinook 39345    29 24316     1 -3805
+#> 1     4 PenDlm_cov Summer_Chinook 23252    34 15868     8 -1223
+#> 2     5 PenDlm_cov Summer_Chinook 14346    44 11257    16 -1232
+#> 3     6 PenDlm_cov Summer_Chinook  1329 16306  3388 16253  -858
+#> 4   115 PenDlm_cov Summer_Chinook 38928    26 23505     1 -3313
 ```
 
 The shape and scale parameters of the gamma prior can be controlled with
