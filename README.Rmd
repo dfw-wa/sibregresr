@@ -29,7 +29,7 @@ You can install sibregresr from [GitHub](https://github.com/) with:
 
 ``` r
 # install.packages("devtools")
-devtools::install_github("wdfw-fp/sibregresr")
+devtools::install_github("dfw-wa/sibregresr")
 ```
 
 ## Example
