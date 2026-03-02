@@ -15,7 +15,7 @@ You can install sibregresr from [GitHub](https://github.com/) with:
 
 ``` r
 # install.packages("devtools")
-devtools::install_github("wdfw-fp/sibregresr")
+devtools::install_github("dfw-wa/sibregresr")
 ```
 
 ## Example
@@ -41,7 +41,7 @@ forecast<-forecast_fun(
   perf_yrs = 15,
   wt_yrs = NULL,
 )
-#> [1] "Time for model fitting was 15.5 secs"
+#> [1] "Time for model fitting was 17.9 secs"
 
 make_table(forecast$forecasts,"MAPE_weight")
 ```
