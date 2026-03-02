@@ -7,11 +7,11 @@ sibling regression dynamic linear models.
 
 Useful links:
 
-- <https://github.com/wdfw-fp/sibregresr>
+- <https://github.com/dfw-wa/sibregresr>
 
 - <https://wdfw-fp.github.io/sibregresr/>
 
-- Report bugs at <https://github.com/wdfw-fp/sibregresr/issues>
+- Report bugs at <https://github.com/dfw-wa/sibregresr/issues>
 
 ## Author
 
