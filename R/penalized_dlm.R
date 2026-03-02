@@ -384,30 +384,30 @@ r2d2_dlm<-function(dat,form=y~x,
   )
 
   # --- Optimization pass 1 ---
-  cat("=== Optimization pass 1 (nlminb) ===\n")
+  # cat("=== Optimization pass 1 (nlminb) ===\n")
   opt1 <- nlminb(
     start     = obj$par,
     objective = obj$fn,
     gradient  = obj$gr,
     control   = list(iter.max = 1000, eval.max = 2000)
   )
-  cat("  Message:", opt1$message, "\n")
-  cat("  NLL:", opt1$objective, "\n")
+  # cat("  Message:", opt1$message, "\n")
+  # cat("  NLL:", opt1$objective, "\n")
 
-  # --- Optimization pass 2 ---
-  cat("\n=== Optimization pass 2 (nlminb from pass 1) ===\n")
-  opt2 <- nlminb(
-    start     = opt1$par,
-    objective = obj$fn,
-    gradient  = obj$gr,
-    control   = list(iter.max = 1000, eval.max = 2000)
-  )
-  cat("  Message:", opt2$message, "\n")
-  cat("  NLL:", opt2$objective, "\n")
-  cat("  NLL change:", opt2$objective - opt1$objective, "\n")
+  # # --- Optimization pass 2 ---
+  # cat("\n=== Optimization pass 2 (nlminb from pass 1) ===\n")
+  # opt2 <- nlminb(
+  #   start     = opt1$par,
+  #   objective = obj$fn,
+  #   gradient  = obj$gr,
+  #   control   = list(iter.max = 1000, eval.max = 2000)
+  # )
+  # cat("  Message:", opt2$message, "\n")
+  # cat("  NLL:", opt2$objective, "\n")
+  # cat("  NLL change:", opt2$objective - opt1$objective, "\n")
 
   # --- Optimization pass 3 (BFGS) ---
-  cat("\n=== Optimization pass 3 (BFGS) ===\n")
+  # cat("\n=== Optimization pass 3 (BFGS) ===\n")
   opt3 <- optim(
     par     = opt2$par,
     fn      = obj$fn,
@@ -415,9 +415,9 @@ r2d2_dlm<-function(dat,form=y~x,
     method  = "BFGS",
     control = list(maxit = 1000)
   )
-  cat("  Convergence:", opt3$convergence, "(0 = success)\n")
-  cat("  NLL:", opt3$value, "\n")
-  cat("  NLL change:", opt3$value - opt2$objective, "\n")
+  # cat("  Convergence:", opt3$convergence, "(0 = success)\n")
+  # cat("  NLL:", opt3$value, "\n")
+  # cat("  NLL change:", opt3$value - opt2$objective, "\n")
 
   # Re-run to further decrease final gradient
   # parameter_estimates = stats::nlminb(

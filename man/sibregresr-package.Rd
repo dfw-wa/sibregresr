@@ -11,9 +11,9 @@ This package generates salmon return forecasts based on (ensembles of) sibling r
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://github.com/wdfw-fp/sibregresr}
+  \item \url{https://github.com/dfw-wa/sibregresr}
   \item \url{https://wdfw-fp.github.io/sibregresr/}
-  \item Report bugs at \url{https://github.com/wdfw-fp/sibregresr/issues}
+  \item Report bugs at \url{https://github.com/dfw-wa/sibregresr/issues}
 }
 
 }
