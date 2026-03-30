@@ -184,7 +184,8 @@ return(list(
 #' @return the fitted TMB model object, which has the NLL and the linear predictors in the report()
 #' @export
 #'
-r2d2_dlm<-function(dat,form=y~x,
+r2d2_dlm<-function(dat,
+                   form=y~x,
                   alpha_dirichlet = NULL,#1 / p_cov,
                   scale_evol      = TRUE,
                   R2_a            = 0.5,
@@ -192,7 +193,11 @@ r2d2_dlm<-function(dat,form=y~x,
                   rho_a           = 3.0,
                   rho_b           = 2.0,
                   intercept_n_equiv = 3,       # intercept gets ~3 average-predictor-equivalents.
-                  sd_init_intercept = 1      # vague prior on initial intercept level (change to 1 if standardize y
+                  sd_init_intercept = 1,      # vague prior on initial intercept level (change to 1 if standardize y
+                  phi_a =3,                    #Beta(3, 2) on (φ+1)/2, which corresponds to a prior on φ with mode around 0.1 and most mass between −0.2 and 0.6
+                  phi_b = 2,
+                  weird_jacob=FALSE,
+                  log_correct=FALSE
                   ){
 
   T_total <- nrow(dat)
@@ -202,6 +207,16 @@ r2d2_dlm<-function(dat,form=y~x,
 
   X_cov <- scale(X_cov)  # standardize using all rows including forecast year
   #Should swtich to standardize using only the historical data and then apply the same centering/scaling to the forecast-year covariates, so the standardization isn't contaminated by the values we're trying to predict with.
+  #
+  # #missing covariate indices
+  miss_idx <- which(is.na(X_cov), arr.ind = TRUE)
+  miss_row <- miss_idx[, 1]
+  miss_col <- miss_idx[, 2]
+  n_missing <- nrow(miss_idx)
+
+  #copy of covariates with NA's replaced with zeros to pass to TMB so it is a numeric  matrix
+  X_cov_input <- X_cov
+  X_cov_input[is.na(X_cov_input)] <- 0  # placeholder, will be overwritten by x_missing
 
   # Observed response: last year is NA (forecast target)
   y <- dat$y
@@ -221,9 +236,15 @@ r2d2_dlm<-function(dat,form=y~x,
     R2_b2<-R2_b
   }
 
+
+
+
   dat_mod <- list(
     y               = y,
-    X_cov           = X_cov,
+    X_cov           = X_cov_input,
+    n_missing       = n_missing,
+    miss_row        = miss_row,
+    miss_col        = miss_col,
     alpha_dirichlet = alpha_dirichlet2,
     scale_evol      = scale_evol,
     R2_a            = R2_a,
@@ -231,11 +252,18 @@ r2d2_dlm<-function(dat,form=y~x,
     rho_a           = rho_a,
     rho_b           = rho_b,
     intercept_n_equiv = intercept_n_equiv,       # intercept gets ~3 average-predictor-equivalents.
-    sd_init_intercept = sd_init_intercept      # vague prior on initial intercept level (change to 1 if standardize y)
+    sd_init_intercept = sd_init_intercept,      # vague prior on initial intercept level (change to 1 if standardize y)
+    weird_jacob=weird_jacob,
+    log_correct=log_correct
   )
 
 
+
   nll_fn <- function(pars) {
+
+    "[<-" <- RTMB::ADoverload("[<-")
+
+
     RTMB::getAll(pars, dat_mod)
 
     Tobs <- length(y)
@@ -245,6 +273,8 @@ r2d2_dlm<-function(dat,form=y~x,
     R2      <- RTMB::plogis(logit_R2)
     sigma_y <- exp(log_sigma_y)
     tau     <- sigma_y * sqrt(R2 / (1.0 - R2 + 1e-10))
+    phi <- 2.0 * RTMB::plogis(logit_phi) - 1.0
+
 
     # Softmax for xi (log_xi_raw[1] fixed to 0 via map)
     log_xi_raw_stable <- log_xi_raw - max(log_xi_raw)
@@ -263,6 +293,7 @@ r2d2_dlm<-function(dat,form=y~x,
 
     # Intercept innovation SD (tied to tau)
     sd_evol_int <- tau * sqrt(intercept_n_equiv / (p * T_scale))
+
 
     nll <- 0.0
 
@@ -289,16 +320,23 @@ r2d2_dlm<-function(dat,form=y~x,
     }
 
     # (4) Jacobian for log_sigma_y -> sigma_y
+    if(weird_jacob){
     nll <- nll - log_sigma_y
+}
+    # (5) Beta(phi_a, phi_b) on (phi+1)/2, with Jacobian for logit transform
+    phi_01 <- (phi + 1.0) / 2.0  # map to (0,1)
+    nll <- nll - phi_a * log(phi_01 + 1e-15) -
+      phi_b * log(1.0 - phi_01 + 1e-15)
+
 
     # =================================================================
     # INTERCEPT (outside R2D2, but tied to tau)
     # =================================================================
 
-    # (5a) Initial intercept: vague prior
+    # (6a) Initial intercept: vague prior
     nll <- nll - RTMB::dnorm(beta_int[1], 0.0, sd_init_intercept, log = TRUE)
 
-    # (5b) Intercept evolution
+    # (6b) Intercept evolution
     for (t in 2:Tobs) {
       nll <- nll - RTMB::dnorm(beta_int[t], beta_int[t-1], sd_evol_int, log = TRUE)
     }
@@ -307,13 +345,13 @@ r2d2_dlm<-function(dat,form=y~x,
     # COVARIATE COEFFICIENTS (under R2D2)
     # =================================================================
 
-    # (6) Initial state: beta_cov_{j,1} ~ N(0, sd_init_j)
+    # (7) Initial state: beta_cov_{j,1} ~ N(0, sd_init_j)
     for (j in 1:p) {
       sd_init <- sqrt(rho[j] * xi[j] * tau^2 + 1e-10)
       nll <- nll - RTMB::dnorm(beta_cov[1, j], 0.0, sd_init, log = TRUE)
     }
 
-    # (7) Covariate coefficient evolution
+    # (8) Covariate coefficient evolution
     for (j in 1:p) {
       sd_evol <- sqrt((1.0 - rho[j]) * xi[j] * tau^2 / T_scale + 1e-10)
       for (t in 2:Tobs) {
@@ -322,14 +360,44 @@ r2d2_dlm<-function(dat,form=y~x,
     }
 
     # =================================================================
+    # MISSING COVARIATES
+    # =================================================================
+    # In the nll function, fill missing values into X:
+    for (k in 1:n_missing) {
+      X_cov[miss_row[k], miss_col[k]] <- x_missing[k]
+      # N(0,1) prior on imputed values
+      nll <- nll - RTMB::dnorm(x_missing[k], 0.0, 1.0, log = TRUE)
+    }
+
+    # =================================================================
     # OBSERVATION LIKELIHOOD (skip NAs for forecast year)
     # =================================================================
 
     # (8) y_t ~ N(mu_t, sigma_y)
+    # for (t in 1:Tobs) {
+    #   if (!is.na(y[t])) {
+    #     mu <- beta_int[t] + sum(X_cov[t, ] * beta_cov[t, ])
+    #     nll <- nll - RTMB::dnorm(y[t], mu, sigma_y, log = TRUE)
+    #   }
+    # }
+
+    # (9) Conditional AR(1) observation likelihood
     for (t in 1:Tobs) {
       if (!is.na(y[t])) {
-        mu <- beta_int[t] + sum(X_cov[t, ] * beta_cov[t, ])
-        nll <- nll - RTMB::dnorm(y[t], mu, sigma_y, log = TRUE)
+        mu_t <- beta_int[t] + sum(    X_cov[t, ] * beta_cov[t, ])
+        if (t == 1) {
+          # Marginal distribution of first observation
+          sd_1 <- sigma_y / sqrt(1.0 - phi^2 + 1e-10)
+          nll <- nll - RTMB::dnorm(y[t], mu_t, sd_1, log = TRUE)
+        } else if (!is.na(y[t-1])) {
+          mu_prev <- beta_int[t-1] + sum(    X_cov[t-1, ] * beta_cov[t-1, ])
+          resid_prev <- y[t-1] - mu_prev
+          nll <- nll - RTMB::dnorm(y[t], mu_t + phi * resid_prev, sigma_y, log = TRUE)
+        } else {
+          # If previous y was NA, fall back to marginal
+          sd_1 <- sigma_y / sqrt(1.0 - phi^2 + 1e-10)
+          nll <- nll - RTMB::dnorm(y[t], mu_t, sd_1, log = TRUE)
+        }
       }
     }
 
@@ -338,7 +406,19 @@ r2d2_dlm<-function(dat,form=y~x,
     # =================================================================
 
     # Forecast: linear predictor for the last (NA) year
-    mu_forecast <- beta_int[Tobs] + sum(X_cov[Tobs, ] * beta_cov[Tobs, ])
+    mu_T   <- beta_int[T_total - 1] + sum(    X_cov[T_total - 1, ] * beta_cov[T_total - 1, ])
+    mu_Tp1 <- beta_int[T_total] + sum(    X_cov[T_total, ] * beta_cov[T_total, ])
+    resid_T <- y[T_total - 1] - mu_T
+
+    mu_forecast <- mu_Tp1 + phi * resid_T
+    if(log_correct){
+      mu_forecast<-mu_forecast + sigma_y^2 / 2
+    }
+
+    # y_forecast_natural <- exp(mu_forecast + sigma_y^2 / 2)
+    # y_forecast_natural <- exp(mu_forecast + (mu_se^2 + sigma_y^2) / 2)
+
+    coefs <- cbind(beta_int,beta_cov)
 
     RTMB::ADREPORT(R2)
     RTMB::ADREPORT(tau)
@@ -349,6 +429,8 @@ r2d2_dlm<-function(dat,form=y~x,
     RTMB::ADREPORT(mu_forecast)
     RTMB::ADREPORT(beta_int)
     RTMB::ADREPORT(beta_cov)
+    RTMB::ADREPORT(phi)
+    RTMB::REPORT(coefs)
     RTMB::REPORT(mu_forecast)
     RTMB::REPORT(nll)
 
@@ -365,7 +447,9 @@ r2d2_dlm<-function(dat,form=y~x,
     log_xi_raw  = rep(0, p_cov),              # first element fixed via map
     logit_rho   = rep(0.5, p_cov),            # rho ~ 0.62
     beta_int    = rep(0, T_total),             # intercept random effects
-    beta_cov    = matrix(0, T_total, p_cov)    # covariate coefficient random effects
+    beta_cov    = matrix(0, T_total, p_cov),    # covariate coefficient random effects
+    logit_phi = 0.7,
+    x_missing = rep(.01, n_missing)
   )
 
   # Fix first element of log_xi_raw for simplex identifiability
@@ -378,7 +462,7 @@ r2d2_dlm<-function(dat,form=y~x,
   obj <- RTMB::MakeADFun(
     func       = nll_fn,
     parameters = pars,
-    random     = c("beta_int", "beta_cov"),
+    random     = c("beta_int", "beta_cov", "x_missing"),
     map        = map_list,
     silent     = TRUE
   )
@@ -409,7 +493,7 @@ r2d2_dlm<-function(dat,form=y~x,
   # --- Optimization pass 3 (BFGS) ---
   # cat("\n=== Optimization pass 3 (BFGS) ===\n")
   opt3 <- optim(
-    par     = opt2$par,
+    par     = opt1$par,
     fn      = obj$fn,
     gr      = obj$gr,
     method  = "BFGS",
