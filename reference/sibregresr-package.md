@@ -9,7 +9,7 @@ Useful links:
 
 - <https://github.com/dfw-wa/sibregresr>
 
-- <https://wdfw-fp.github.io/sibregresr/>
+- <https://dfw-wa.github.io/sibregresr/>
 
 - Report bugs at <https://github.com/dfw-wa/sibregresr/issues>
 

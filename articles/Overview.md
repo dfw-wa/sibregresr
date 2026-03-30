@@ -82,7 +82,7 @@ forecast<-forecast_fun(
   perf_yrs = 15,
   wt_yrs = NULL,
 )
-#> [1] "Time for model fitting was 16.7 secs"
+#> [1] "Time for model fitting was 17.1 secs"
 ```
 
 The arguments in the above call are set to the defaults, which includes
