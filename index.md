@@ -14,6 +14,7 @@ functionality.
 You can install sibregresr from [GitHub](https://github.com/) with:
 
 ``` r
+
 # install.packages("devtools")
 devtools::install_github("dfw-wa/sibregresr")
 ```
@@ -28,6 +29,7 @@ with weights based on mean absolute percent errors.
 See the *Overview* article for more details and examples.
 
 ``` r
+
 library(sibregresr)
 
 forecast<-forecast_fun(
@@ -49,6 +51,7 @@ make_table(forecast$forecasts,"MAPE_weight")
 ![](reference/figures/README-example-1.png)
 
 ``` r
+
 
 make_plot(forecast$forecasts,"MAPE_weight")
 ```
