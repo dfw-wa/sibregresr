@@ -24,3 +24,8 @@ tibble with list columns
 \description{
 puts data into a list column with different subsets (different numbers of years excluded) in each row, for fitting
 }
+\details{
+Retrospective subsets are generated independently for each stock,
+limited by its history length and \code{n_forecasts}. Shorter stock
+histories do not reduce the number of retrospective forecasts for other stocks.
+}

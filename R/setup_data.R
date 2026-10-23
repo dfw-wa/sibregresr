@@ -6,6 +6,10 @@
 #' @param n_forecasts number of one-year ahead forecasts to conduct
 #' @param mod_list list of model functions as returned from `mod_funs` function call
 #'
+#' @details Retrospective subsets are generated independently for each stock,
+#' limited by its history length and `n_forecasts`. Shorter stock
+#' histories do not reduce the number of retrospective forecasts for other stocks.
+#'
 #' @return tibble with list columns
 #' @export
 setup_data<-function(df,
@@ -49,9 +53,10 @@ setup_data<-function(df,
                  mutate(across(contains("Age"),\(x)x=NA)))
     )()|>
     # left_join(covariates,by="ReturnYear") |>
-    tidyr::nest() %>% dplyr::mutate(n=dim(data[[1]])[1]) |>
+    tidyr::nest() %>% dplyr::mutate(n=purrr::map_int(data, nrow)) |>
     ## Slice the data to re-fit subsets of data with years trimmed off the end
-    crossing(n_years=c(-(1:(min(n-5,n_forecasts)+1)))) |>
+    dplyr::mutate(n_years=purrr::map(n, ~-seq_len(min(.x-5,n_forecasts)+1))) |>
+    tidyr::unnest(cols=n_years) |>
     mutate(Actual=purrr::map2(data,n_years, ~dplyr::slice(.x, nrow(.x)+.y+1)),
            data=purrr::map2(data, n_years, ~return_to_brood(head(.x, n=.y),FALSE))) |>
     crossing(tibble(model_name=names(mod_list),
