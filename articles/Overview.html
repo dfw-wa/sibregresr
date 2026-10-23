@@ -140,7 +140,7 @@ function.</p>
 <span>  perf_yrs <span class="op">=</span> <span class="fl">15</span>,</span>
 <span>  wt_yrs <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "Time for model fitting was 16.8 secs"</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] "Time for model fitting was 14.9 secs"</span></span></code></pre></div>
 <p>The arguments in the above call are set to the defaults, which
 includes 7 models in the ensembles, log transforms the response and
 predictor, and does not scale the predictor and response prior to
@@ -389,7 +389,7 @@ model averaging happening.</p>
 <span>  perf_yrs <span class="op">=</span> <span class="fl">15</span>,</span>
 <span>  wt_yrs <span class="op">=</span> <span class="fl">1</span>,</span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "Time for model fitting was 6 secs"</span></span>
+<span><span class="co">#&gt; [1] "Time for model fitting was 5.5 secs"</span></span>
 <span></span>
 <span><span class="va">pen_dlm_forecast</span><span class="op">$</span><span class="va">forecasts</span> <span class="op">|&gt;</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">ReturnYear</span><span class="op">==</span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">ReturnYear</span><span class="op">)</span>,<span class="va">model_name</span><span class="op">==</span><span class="st">"PenDlm"</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">Stock</span>,<span class="va">Pred</span>,<span class="va">MAPE</span>,<span class="va">RMSE</span>,<span class="va">MPE</span>,<span class="va">MEr</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="va">Stock</span>,<span class="va">Age</span>,<span class="va">MAPE</span><span class="op">)</span><span class="op">|&gt;</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span><span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/across.html" class="external-link">across</a></span><span class="op">(</span><span class="fu">where</span><span class="op">(</span><span class="va">is.numeric</span><span class="op">)</span>,<span class="va">round</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 4 × 8</span></span></span>
@@ -486,7 +486,7 @@ them.</p>
 <span>  covariates <span class="op">=</span> <span class="va">covariates_24</span>,</span>
 <span>  penDLM_formula <span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/stats/formula.html" class="external-link">formula</a></span><span class="op">(</span><span class="st">"y~ x + lag2_PDO + lag2_NPGO"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "Time for model fitting was 4.9 secs"</span></span>
+<span><span class="co">#&gt; [1] "Time for model fitting was 4.8 secs"</span></span>
 <span></span>
 <span><span class="va">pen_dlm_forecast_cov</span><span class="op">$</span><span class="va">forecasts</span> <span class="op">|&gt;</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">ReturnYear</span><span class="op">==</span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">ReturnYear</span><span class="op">)</span>,<span class="va">model_name</span><span class="op">==</span><span class="st">"PenDlm"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>model_name<span class="op">=</span><span class="st">"PenDlm_cov"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>

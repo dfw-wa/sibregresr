@@ -97,6 +97,7 @@ limitations under the License.
 - [`performance_weights()`](performance_weights.md) : Calculates
   weighted average forecasts, performance metrics, and prediction
   intervals based on past performance
+- [`r2d2_dlm()`](r2d2_dlm.md) : R2D2 penalized DLM in RTMB
 - [`return_to_brood()`](return_to_brood.md) : Convert a Return Table to
   a Brood Table
 - [`setup_data()`](setup_data.md) : Setup data
