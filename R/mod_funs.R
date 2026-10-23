@@ -97,8 +97,8 @@ pen_dlm_formals  <- names(formals(pen_dlm))
 r2d2_dlm_formals <- names(formals(r2d2_dlm))
 
 for(nm in names(dots)){
-  if(nm %in% pen_dlm_formals)  formals(pen_dlm_out)[[nm]]  <- dots[[nm]]
-  if(nm %in% r2d2_dlm_formals) formals(r2d2_dlm_out)[[nm]] <- dots[[nm]]
+  if(nm %in% pen_dlm_formals)  formals(pen_dlm_out)[nm]  <- list(dots[[nm]])
+  if(nm %in% r2d2_dlm_formals) formals(r2d2_dlm_out)[nm] <- list(dots[[nm]])
 }
 
 

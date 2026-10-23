@@ -181,6 +181,9 @@ return(list(
 #' @param intercept_n_equiv multiplier on the amount of variance given to average covariate, which is given to intercept.
 #' @param sd_init_intercept sd on the intercept initial value
 #'
+#' @details Predictors are standardized using all rows except the final forecast
+#' row. The same historical means and standard deviations are applied to that row.
+#'
 #' @return the fitted TMB model object, which has the NLL and the linear predictors in the report()
 #' @export
 #'
@@ -203,11 +206,12 @@ r2d2_dlm<-function(dat,
   T_total <- nrow(dat)
   options(na.action = "na.pass")
   X_cov<-stats::model.matrix(form,data=dat)
-  X_cov<-X_cov[,-1]
+  X_cov<-X_cov[,-1, drop = FALSE]
 
-  X_cov <- scale(X_cov)  # standardize using all rows including forecast year
-  #Should swtich to standardize using only the historical data and then apply the same centering/scaling to the forecast-year covariates, so the standardization isn't contaminated by the values we're trying to predict with.
-  #
+  hist_idx <- seq_len(nrow(X_cov) - 1)
+  cov_means <- colMeans(X_cov[hist_idx,, drop = FALSE], na.rm = TRUE)
+  cov_sds   <- apply(X_cov[hist_idx,, drop = FALSE], 2, sd, na.rm = TRUE)
+  X_cov[,] <- sweep(sweep(X_cov[,, drop = FALSE], 2, cov_means, "-"), 2, cov_sds, "/")
   # #missing covariate indices
   miss_idx <- which(is.na(X_cov), arr.ind = TRUE)
   miss_row <- miss_idx[, 1]
@@ -363,7 +367,7 @@ r2d2_dlm<-function(dat,
     # MISSING COVARIATES
     # =================================================================
     # In the nll function, fill missing values into X:
-    for (k in 1:n_missing) {
+    for (k in  seq_len(n_missing)) {
       X_cov[miss_row[k], miss_col[k]] <- x_missing[k]
       # N(0,1) prior on imputed values
       nll <- nll - RTMB::dnorm(x_missing[k], 0.0, 1.0, log = TRUE)
@@ -526,7 +530,6 @@ r2d2_dlm<-function(dat,
     obj=obj
   ))
 }
-
 
 
 
